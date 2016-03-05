@@ -1,0 +1,16 @@
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\bin\Debug\Shut Down.exe.config
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\bin\Debug\Shut Down.exe
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\bin\Debug\Shut Down.pdb
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\ShutDown.csprojResolveAssemblyReference.cache
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\MainWindow.g.cs
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\App.g.cs
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\Shut Down_MarkupCompile.cache
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\Shut Down_MarkupCompile.lref
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\App.baml
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\MainWindow.baml
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\Shut Down.g.resources
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\ShutDown.Properties.Resources.resources
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\ShutDown.csproj.GenerateResource.Cache
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\Shut Down.exe
+D:\Documents\Github\_notpublished\ShutDown\ShutDown\obj\Debug\Shut Down.pdb
