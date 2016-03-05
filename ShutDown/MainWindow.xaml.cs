@@ -57,7 +57,7 @@ namespace ShutDown
 
         private void HelpBtnClick(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://google.com");
+            Process.Start("http://stanac.github.io/shutdown/");
         }
     }
 }
