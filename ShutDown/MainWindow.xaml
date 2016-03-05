@@ -1,0 +1,274 @@
+﻿<Window x:Class="ShutDown.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShutDown"
+        mc:Ignorable="d"
+        Title="Shut down"
+        Height="400"
+        Width="525"
+        WindowStyle="None"
+        ResizeMode="NoResize">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+    <Border BorderBrush="Black"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Background="Silver">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="ShutDown"
+                           Style="{StaticResource H1}"
+                           HorizontalAlignment="Center" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal">
+                    <Button Content="?"
+                            Style="{StaticResource BtnHead}"
+                            Click="HelpBtnClick" />
+                    <Button Content="_"
+                            Style="{StaticResource BtnHead}"
+                            Click="MinBtnClick" />
+                    <Button Content="×"
+                            Style="{StaticResource BtnHead}"
+                            Click="CloseBtnClick" />
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Row="1"
+                  Margin="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Manual settings"
+                               Style="{StaticResource H1}" />
+
+                    <Grid Grid.Row="1"
+                          Margin="0, 20, 0, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Select operation"
+                                   Style="{StaticResource H2}" />
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Margin="20, 0, 0, 0">
+                            <Button Style="{StaticResource BtnSelect}"
+                                    Content="Shut down"
+                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=ShutDown}"
+                                    Command="{Binding SelectOperationCommand}"
+                                    CommandParameter="ShutDown" />
+                            <Button Style="{StaticResource BtnSelect}"
+                                    Content="Restart"
+                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=Restart}"
+                                    Command="{Binding SelectOperationCommand}"
+                                    CommandParameter="Restart" />
+                            <Button Style="{StaticResource BtnSelect}"
+                                    Content="Hibernate"
+                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=Hibernate}"
+                                    Command="{Binding SelectOperationCommand}"
+                                    CommandParameter="Hibernate" />
+                            <Button Style="{StaticResource BtnSelect}"
+                                    Content="Log off"
+                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=SignOut}"
+                                    Command="{Binding SelectOperationCommand}"
+                                    CommandParameter="SignOut" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="2"
+                          Margin="0, 20, 0, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Select delay"
+                                   Style="{StaticResource H2}" />
+
+                        <Slider Minimum="5"
+                                Maximum="1440"
+                                SmallChange="5"
+                                LargeChange="60"
+                                Grid.Column="1"
+                                Margin="20, 0"
+                                VerticalAlignment="Center"
+                                Value="{Binding DelayMinutes, Mode=TwoWay}">
+                        </Slider>
+
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="BorderThickness"
+                                            Value="0" />
+                                    <Setter Property="Width"
+                                            Value="30" />
+                                    <Setter Property="Height"
+                                            Value="20" />
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="DodgerBlue" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Grid.Resources>
+
+                            <Button Content="+5"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Command="{Binding AddDelayCommand}"
+                                    CommandParameter="5" />
+                            <Button Content="+15"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Command="{Binding AddDelayCommand}"
+                                    CommandParameter="15" />
+                            <Button Content="-5"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Command="{Binding AddDelayCommand}"
+                                    CommandParameter="-5" />
+                            <Button Content="-15"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Command="{Binding AddDelayCommand}"
+                                    CommandParameter="-15" />
+                        </Grid>
+                        
+                    </Grid>
+
+                    <Grid Grid.Row="3"
+                          Margin="0, 0, 0, 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="220" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Delay:"
+                                   Style="{StaticResource H2}" />
+                        <TextBlock Grid.Column="1"
+                                   Margin="10, 0, 0, 0"
+                                   Foreground="DodgerBlue"
+                                   FontWeight="Bold"
+                                   Style="{StaticResource H2}"
+                                   Text="{Binding DelayText}" />
+                        <Button Grid.Column="2"
+                                BorderThickness="2"
+                                BorderBrush="MidnightBlue"
+                                Margin="20, 0"
+                                Width="170"
+                                Background="DodgerBlue"
+                                Content="Start with manual setting"
+                                Command="{Binding StartShutDownCommand}"/>
+
+                        <Button Grid.Column="3"
+                                Margin="0, 0"
+                                Content="Force?"
+                                Width="70"
+                                Command="{Binding ToggleForceCommand}"
+                                Background="{Binding Force, Converter={StaticResource BoolToColorConverter}}" />
+
+                    </Grid>
+
+                    <TextBlock Grid.Row="4" HorizontalAlignment="Right"
+                               Margin="20, 0"
+                               Visibility="{Binding Force, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Run>Use the</Run>
+                        <Run Foreground="DodgerBlue">Force</Run>
+                        <Run>at your own rist!</Run>
+                    </TextBlock>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      Margin="0, 10, 0, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="Patterns"
+                               Style="{StaticResource H1}" />
+
+                    <Button Grid.Row="1"
+                            Style="{StaticResource BtnHead}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="+"
+                            Click="AddPatternClick"/>
+
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.RowSpan="2"
+                  Visibility="{Binding ShutDownInProgress, Converter={StaticResource BoolToVisibilityConverter}}"
+                  Margin="10, 40, 10, 10">
+                <Grid.Background>
+                    <SolidColorBrush Color="Silver"
+                                     Opacity="0.9" />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding OperationName}"
+                           Style="{StaticResource H1}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           />
+                
+                <TextBlock Grid.Row="1"
+                           Style="{StaticResource H1}"
+                           FontSize="28"
+                           Foreground="DodgerBlue"
+                           FontWeight="Bold"
+                           Text="{Binding ShutDownRemainingTime}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+
+                <Button Grid.Row="2"
+                        Content="Cancel"
+                        Style="{StaticResource BtnSelect}"
+                        VerticalAlignment="Center"
+                        Command="{Binding CancelShutDownCommand}"/>
+
+            </Grid>
+            
+        </Grid>
+    </Border>
+</Window>
