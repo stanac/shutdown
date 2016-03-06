@@ -12,8 +12,6 @@ namespace ShutDown
         {
             try
             {
-                return;
-
                 string cmd = @"shutdown";
                 string args = operation.GetCommandLineArgs(force);
 

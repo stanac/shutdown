@@ -238,7 +238,7 @@
                   Margin="10, 40, 10, 10">
                 <Grid.Background>
                     <SolidColorBrush Color="Silver"
-                                     Opacity="0.9" />
+                                     Opacity="0.95" />
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />

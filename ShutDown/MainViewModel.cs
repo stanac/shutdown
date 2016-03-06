@@ -94,6 +94,8 @@ namespace ShutDown
                 if (value != _delayMinutes)
                 {
                     _delayMinutes = value;
+                    Settings.Instance.DefaultDelay = value;
+                    Settings.Instance.Save();
                     RaisePropertyChanged(nameof(DelayMinutes));
                     RaisePropertyChanged(nameof(DelayText));
                 }
@@ -132,9 +134,6 @@ namespace ShutDown
             if (val < MinMinutes) val = MinMinutes;
             else if (val > MaxMinutes) val = MaxMinutes;
             DelayMinutes = val;
-            Settings.Instance.DefaultDelay = val;
-            Settings.Instance.Save();
-
         }
 
         private void ToggleForce()
