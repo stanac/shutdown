@@ -35,6 +35,11 @@
                     <Button Content="?"
                             Style="{StaticResource BtnHead}"
                             Click="HelpBtnClick" />
+                    <Button Style="{StaticResource BtnHead}"
+                            Command="{Binding ShowSettingsCommand}"
+                            >
+                        <Image Source="cog.png" Width="18" />
+                    </Button>
                     <Button Content="_"
                             Style="{StaticResource BtnHead}"
                             Click="MinBtnClick" />
@@ -268,7 +273,36 @@
                         Command="{Binding CancelShutDownCommand}"/>
 
             </Grid>
-            
+
+            <Grid Grid.RowSpan="2"
+                  Visibility="{Binding SettingsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                  Margin="10, 40, 10, 10">
+                <Grid.Background>
+                    <SolidColorBrush Color="Silver"
+                                     Opacity="0.95" />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="10">
+                    <CheckBox Content="Start with windows"
+                              Margin="5"
+                              IsChecked="{Binding DoesStartWithWindows}"/>
+                    <!--<CheckBox Content="Minimize to tray"
+                              Margin="5"
+                               />-->
+                </StackPanel>
+
+                <Button Grid.Row="2"
+                        Content="Close"
+                        Style="{StaticResource BtnSelect}"
+                        VerticalAlignment="Center"
+                        Command="{Binding HideSettingsCommand}" />
+
+            </Grid>
         </Grid>
     </Border>
 </Window>

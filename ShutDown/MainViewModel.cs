@@ -14,12 +14,16 @@ namespace ShutDown
         private ICommand _toggleForceCommand;
         private ICommand _startShutDownCommand;
         private ICommand _cancelShutDownCommand;
+        private ICommand _showSettingsCommand;
+        private ICommand _hideSettingsCommand;
         private int _delayMinutes = 60;
         private bool _shutDownInProgress;
         private string _shutDownRemainingTime;
         private string _operationName;
+        private bool _settingsVisible;
         private DispatcherTimer _timer;
         private DateTime _startTime;
+        private bool _doesStartWithWindows;
         public event EventHandler CloseApp;
 
         public MainViewModel()
@@ -30,6 +34,7 @@ namespace ShutDown
             MinMinutes = settings.MinMinutes;
             MaxMinutes = settings.MaxMinutes;
             Force = settings.DefaultForce;
+            DoesStartWithWindows = StartWithWindows.IsSet();
         }
 
         public int MinMinutes { get; private set; }
@@ -69,6 +74,31 @@ namespace ShutDown
                 {
                     _operationName = value;
                     RaisePropertyChanged(nameof(OperationName));
+                }
+            }
+        }
+        public bool SettingsVisible
+        {
+            get { return _settingsVisible; }
+            set
+            {
+                if (_settingsVisible != value)
+                {
+                    _settingsVisible = value;
+                    RaisePropertyChanged(nameof(SettingsVisible));
+                }
+            }
+        }
+        public bool DoesStartWithWindows
+        {
+            get { return _doesStartWithWindows; }
+            set
+            {
+                if (value != _doesStartWithWindows)
+                {
+                    StartWithWindows.Set(value);
+                    _doesStartWithWindows = value;
+                    RaisePropertyChanged(nameof(DoesStartWithWindows));
                 }
             }
         }
@@ -120,6 +150,10 @@ namespace ShutDown
         public ICommand StartShutDownCommand => _startShutDownCommand ?? (_startShutDownCommand = new Command(StartShutDown));
 
         public ICommand CancelShutDownCommand => _cancelShutDownCommand ?? (_cancelShutDownCommand = new Command(CancelShutDown));
+
+        public ICommand ShowSettingsCommand => _showSettingsCommand ?? (_showSettingsCommand = new Command(ShowSettings));
+
+        public ICommand HideSettingsCommand => _hideSettingsCommand ?? (_hideSettingsCommand = new Command(HideSettings));
 
         private void SelectOperation(string operation)
         {
@@ -191,6 +225,16 @@ namespace ShutDown
             {
 
             }
+        }
+
+        private void ShowSettings()
+        {
+            SettingsVisible = true;
+        }
+
+        private void HideSettings()
+        {
+            SettingsVisible = false;
         }
 
         private void RaiseCloseApp()
