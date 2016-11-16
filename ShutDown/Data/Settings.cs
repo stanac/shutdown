@@ -17,6 +17,8 @@ namespace ShutDown.Data
         public int DefaultDelay { get; set; }
         public bool DefaultForce { get; set; }
         public ShutDownOperation DefaultOperation { get; set; }
+        public bool CloseToTray { get; set; }
+        public bool BlinkTrayIcon { get; set; }
         public List<PatternModel> Patterns { get; set; }
 
         private Settings()
@@ -53,6 +55,7 @@ namespace ShutDown.Data
                     .ToArray();
 
                 Instance = new Settings();
+                bool blinkIsSet = false;
 
                 foreach (var line in lines)
                 {
@@ -76,10 +79,25 @@ namespace ShutDown.Data
                     {
                         Instance.DefaultOperation = (ShutDownOperation)Enum.Parse(typeof(ShutDownOperation), line.Split(':')[1]);
                     }
+                    else if (line.StartsWith($"{nameof(CloseToTray)}:"))
+                    {
+                        Instance.CloseToTray = bool.Parse(line.Split(':')[1]);
+                    }
+                    else if (line.StartsWith($"{nameof(BlinkTrayIcon)}:"))
+                    {
+                        Instance.BlinkTrayIcon = bool.Parse(line.Split(':')[1]);
+                        blinkIsSet = true;
+                    }
                     else if (line.StartsWith("p:"))
                     {
                         Instance.Patterns.Add(PatternModel.Parse(line));
                     }
+                }
+                
+                if (!blinkIsSet)
+                {
+                    Instance.BlinkTrayIcon = true;
+                    Instance.Save();
                 }
             }
             catch
@@ -92,7 +110,8 @@ namespace ShutDown.Data
         {
             MinMinutes = 5,
             MaxMinutes = 1440,
-            DefaultDelay = 60
+            DefaultDelay = 60,
+            BlinkTrayIcon = true
         };
 
         public void Save()
@@ -103,6 +122,8 @@ namespace ShutDown.Data
 {nameof(DefaultDelay)}:{DefaultDelay}
 {nameof(DefaultForce)}:{DefaultForce}
 {nameof(DefaultOperation)}:{DefaultOperation}
+{nameof(CloseToTray)}:{CloseToTray}
+{nameof(BlinkTrayIcon)}:{BlinkTrayIcon}
 ";
             foreach (var p in Patterns)
             {

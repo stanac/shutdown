@@ -11,7 +11,7 @@ namespace ShutDown
 
         static StartWithWindows()
         {
-            _execPath = Assembly.GetExecutingAssembly().Location;
+            _execPath = Assembly.GetExecutingAssembly().Location + " /winstart";
         }
 
         public static void Set(bool startWithWindows)

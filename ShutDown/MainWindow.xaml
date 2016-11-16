@@ -282,18 +282,27 @@
                                      Opacity="0.95" />
                 </Grid.Background>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="2*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Margin="10">
+                <StackPanel Margin="10"
+                            VerticalAlignment="Top">
                     <CheckBox Content="Start with windows"
                               Margin="5"
+                              HorizontalAlignment="Left"
                               IsChecked="{Binding DoesStartWithWindows}"/>
-                    <!--<CheckBox Content="Minimize to tray"
+                    <CheckBox Content="Close to tray"
+                              HorizontalAlignment="Left"
                               Margin="5"
-                               />-->
+                              IsChecked="{Binding CloseToTray}" />
+                    <TextBlock Text="When both checkboxes are checked app will start closed to tray when starting with windows."
+                               TextWrapping="Wrap"
+                               Margin="5" />
+                    <TextBlock Text=""
+                               Margin="5" />
+                    <CheckBox Content="Blink tray icon when delayed operation is in progress"
+                              IsChecked="{Binding BlinkTrayIcon}" />
                 </StackPanel>
 
                 <Button Grid.Row="2"

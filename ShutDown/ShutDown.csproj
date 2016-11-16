@@ -55,6 +55,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -80,11 +82,13 @@
     <Compile Include="Data\DataBase.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\Log.cs" />
+    <Compile Include="TrayIconContextMenuItem.cs" />
     <Compile Include="Models\PatternModel.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="ShutDownHelper.cs" />
     <Compile Include="StartWithWindows.cs" />
+    <Compile Include="TrayIcon.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -139,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon_red.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

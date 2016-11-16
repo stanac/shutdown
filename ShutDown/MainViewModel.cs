@@ -21,9 +21,13 @@ namespace ShutDown
         private string _shutDownRemainingTime;
         private string _operationName;
         private bool _settingsVisible;
+        private bool _closeToTray;
         private DispatcherTimer _timer;
         private DateTime _startTime;
         private bool _doesStartWithWindows;
+        private bool _blinkTrayIcon;
+        public TrayIcon TheTrayIcon = new TrayIcon();
+
         public event EventHandler CloseApp;
 
         public MainViewModel()
@@ -34,6 +38,10 @@ namespace ShutDown
             MinMinutes = settings.MinMinutes;
             MaxMinutes = settings.MaxMinutes;
             Force = settings.DefaultForce;
+            
+            _closeToTray = settings.CloseToTray;
+            _blinkTrayIcon = settings.BlinkTrayIcon;
+
             DoesStartWithWindows = StartWithWindows.IsSet();
         }
 
@@ -50,6 +58,7 @@ namespace ShutDown
                 {
                     _shutDownInProgress = value;
                     RaisePropertyChanged(nameof(ShutDownInProgress));
+                    TheTrayIcon.SetShutDownInProgress(value);
                 }
             }
         }
@@ -99,6 +108,34 @@ namespace ShutDown
                     StartWithWindows.Set(value);
                     _doesStartWithWindows = value;
                     RaisePropertyChanged(nameof(DoesStartWithWindows));
+                }
+            }
+        }
+        public bool CloseToTray
+        {
+            get { return _closeToTray; }
+            set
+            {
+                if (_closeToTray != value)
+                {
+                    Settings.Instance.CloseToTray = value;
+                    Settings.Instance.Save();
+                    _closeToTray = value;
+                    RaisePropertyChanged(nameof(CloseToTray));
+                }
+            }
+        }
+        public bool BlinkTrayIcon
+        {
+            get { return _blinkTrayIcon; }
+            set
+            {
+                if (_blinkTrayIcon != value)
+                {
+                    Settings.Instance.BlinkTrayIcon = value;
+                    Settings.Instance.Save();
+                    _blinkTrayIcon = value;
+                    RaisePropertyChanged(nameof(BlinkTrayIcon));
                 }
             }
         }

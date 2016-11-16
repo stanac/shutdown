@@ -1,19 +1,8 @@
 ﻿using ShutDown.Data;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ShutDown
 {
@@ -25,6 +14,12 @@ namespace ShutDown
         public MainWindow()
         {
             InitializeComponent();
+            
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1 && args[1] == "/winstart" && Settings.Instance.CloseToTray)
+            {
+                Hide();
+            }
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -36,7 +31,19 @@ namespace ShutDown
                     DragMove();
                 }
             };
-            (DataContext as MainViewModel).CloseApp += (s, ec) => { Close(); };
+
+            var vm = (DataContext as MainViewModel);
+            vm.CloseApp += (s, ec) => { Close(); };
+
+            var icon = vm.TheTrayIcon;
+            icon.OnExit = () => 
+            {
+                icon.Dispose();
+                Close();
+            };
+            icon.OnOpen = () => { Show(); };
+            icon.OnCancel = () => { vm.CancelShutDownCommand.Execute(null); };
+
             base.OnInitialized(e);
         }
 
@@ -47,7 +54,21 @@ namespace ShutDown
 
         private void CloseBtnClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            var vm = (DataContext as MainViewModel);
+            if (Settings.Instance.CloseToTray)
+            {
+                Hide();
+                if (vm.ShutDownInProgress)
+                {
+                    var message = vm.OperationName.Replace("in:", "").Trim() + " is still in progress.";
+                    vm.TheTrayIcon.ShowNotification(message);
+                }
+            }
+            else
+            {
+                vm.TheTrayIcon.Dispose();
+                Close();
+            }
         }
 
         private void AddPatternClick(object sender, RoutedEventArgs e)
