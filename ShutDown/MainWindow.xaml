@@ -213,7 +213,7 @@
                                Visibility="{Binding Force, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Run>Use the</Run>
                         <Run Foreground="DodgerBlue">Force</Run>
-                        <Run>at your own rist!</Run>
+                        <Run>at your own risk!</Run>
                     </TextBlock>
                 </Grid>
 
