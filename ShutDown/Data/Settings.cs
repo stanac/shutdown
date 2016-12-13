@@ -20,6 +20,7 @@ namespace ShutDown.Data
         public bool CloseToTray { get; set; }
         public bool BlinkTrayIcon { get; set; }
         public List<PatternModel> Patterns { get; set; }
+        public bool PreventShutDown { get; set; }
 
         private Settings()
         {
@@ -88,6 +89,10 @@ namespace ShutDown.Data
                         Instance.BlinkTrayIcon = bool.Parse(line.Split(':')[1]);
                         blinkIsSet = true;
                     }
+                    else if (line.StartsWith($"{nameof(PreventShutDown)}:"))
+                    {
+                        Instance.PreventShutDown = bool.Parse(line.Split(':')[1]);
+                    }
                     else if (line.StartsWith("p:"))
                     {
                         Instance.Patterns.Add(PatternModel.Parse(line));
@@ -124,6 +129,7 @@ namespace ShutDown.Data
 {nameof(DefaultOperation)}:{DefaultOperation}
 {nameof(CloseToTray)}:{CloseToTray}
 {nameof(BlinkTrayIcon)}:{BlinkTrayIcon}
+{nameof(PreventShutDown)}:{PreventShutDown}
 ";
             foreach (var p in Patterns)
             {

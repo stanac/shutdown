@@ -301,8 +301,13 @@
                                Margin="5" />
                     <TextBlock Text=""
                                Margin="5" />
+                    <CheckBox Content="Prevent ShutDown/Sleep/Hibernate while app is running" 
+                               Margin="5"
+                              IsChecked="{Binding PreventShutDown}"
+                              />
                     <CheckBox Content="Blink tray icon when delayed operation is in progress"
-                              IsChecked="{Binding BlinkTrayIcon}" />
+                              IsChecked="{Binding BlinkTrayIcon}" 
+                              Margin="5"/>
                 </StackPanel>
 
                 <Button Grid.Row="2"

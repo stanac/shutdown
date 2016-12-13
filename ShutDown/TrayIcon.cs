@@ -14,11 +14,15 @@ namespace ShutDown
         private DispatcherTimer _timer;
         private string _currentIcon;
 
+        private const string IconPlainName = "icon.ico";
+        private const string IconRedName = "icon_red.ico";
+        private const string IconGreenName = "icon_green.ico";
+
         public TrayIcon()
         {
             _ni = new NotifyIcon();
             _ni.Visible = true;
-            _ni.Icon = GetIcon("icon.ico");
+            _ni.Icon = PreventShutDownHelper.Prevent ? GetIcon(IconGreenName) : GetIcon(IconRedName);
             _ni.BalloonTipTitle = "Shut down";
             _ni.BalloonTipText = "Shut down is in progress";
             _ni.Text = "Shut Down";
@@ -53,7 +57,7 @@ namespace ShutDown
         public void SetShutDownInProgress(bool isShutDownInProgress)
         {
             _isShutDownInProgress = isShutDownInProgress;
-            _ni.Icon = GetIcon("icon.ico");
+            _ni.Icon = GetIcon(IconPlainName);
             
             SetContextMenu(isShutDownInProgress);
         }
@@ -103,12 +107,20 @@ namespace ShutDown
         {
             if (_isShutDownInProgress && Settings.Instance.BlinkTrayIcon)
             {
-                if (_currentIcon == "icon.ico") _ni.Icon = GetIcon("icon_red.ico");
-                else _ni.Icon = GetIcon("icon.ico");
+                if (_currentIcon != IconRedName) _ni.Icon = GetIcon(IconRedName);
+                else if (PreventShutDownHelper.Prevent) _ni.Icon = GetIcon(IconGreenName);
+                else _ni.Icon = GetIcon(IconPlainName);
             }
-            else if (_currentIcon != "icon.ico")
+            else
             {
-                _ni.Icon = GetIcon("icon.ico");
+                if (PreventShutDownHelper.Prevent)
+                {
+                    if (_currentIcon != IconRedName) _ni.Icon = GetIcon(IconGreenName);
+                }
+                else
+                {
+                    if (_currentIcon != IconPlainName) _ni.Icon = GetIcon(IconPlainName);
+                }
             }
         }
 

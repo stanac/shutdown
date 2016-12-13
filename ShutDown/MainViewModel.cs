@@ -26,6 +26,7 @@ namespace ShutDown
         private DateTime _startTime;
         private bool _doesStartWithWindows;
         private bool _blinkTrayIcon;
+        private bool _preventShutDown = PreventShutDownHelper.Prevent;
         public TrayIcon TheTrayIcon = new TrayIcon();
 
         public event EventHandler CloseApp;
@@ -136,6 +137,19 @@ namespace ShutDown
                     Settings.Instance.Save();
                     _blinkTrayIcon = value;
                     RaisePropertyChanged(nameof(BlinkTrayIcon));
+                }
+            }
+        }
+        public bool PreventShutDown
+        {
+            get { return _preventShutDown; }
+            set
+            {
+                if (value != _preventShutDown)
+                {
+                    _preventShutDown = value;
+                    PreventShutDownHelper.Prevent = value;
+                    RaisePropertyChanged(nameof(PreventShutDown));
                 }
             }
         }
