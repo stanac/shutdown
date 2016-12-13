@@ -301,7 +301,7 @@
                                Margin="5" />
                     <TextBlock Text=""
                                Margin="5" />
-                    <CheckBox Content="Prevent ShutDown/Sleep/Hibernate while app is running" 
+                    <CheckBox Content="Prevent ShutDown/Sleep/Hibernate due to inactivity while app is running" 
                                Margin="5"
                               IsChecked="{Binding PreventShutDown}"
                               />
