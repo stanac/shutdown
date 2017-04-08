@@ -7,7 +7,8 @@ namespace ShutDown.Models
         ShutDown,
         SignOut,
         Restart,
-        Hibernate
+        Hibernate,
+        Sleep
     }
 
     public static class ShutDownOperationMethods
@@ -21,27 +22,16 @@ namespace ShutDown.Models
                     opName = "Hibernate";
                     break;
                 case ShutDownOperation.Restart:
-                    if (force)
-                    {
-                        opName = "Forced restart";
-                    }
-                    else
-                    {
-                        opName = "Restart";
-                    }
+                    opName = force ? "Forced restart" : "Restart";
                     break;
                 case ShutDownOperation.ShutDown:
-                    if (force)
-                    {
-                        opName = "Forced shut down";
-                    }
-                    else
-                    {
-                        opName = "Shut down";
-                    }
+                    opName = force ? "Forced shut down" : "Shut down";
                     break;
                 case ShutDownOperation.SignOut:
                     opName = "Log off";
+                    break;
+                case ShutDownOperation.Sleep:
+                    opName = "Sleep";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -55,7 +45,7 @@ namespace ShutDown.Models
             switch (operation)
             {
                 case ShutDownOperation.Hibernate:
-                    args = "-h";
+                    args = string.Empty;
                     break;
                 case ShutDownOperation.Restart:
                     args = "-r";
@@ -66,22 +56,19 @@ namespace ShutDown.Models
                 case ShutDownOperation.SignOut:
                     args = "-l";
                     break;
+                case ShutDownOperation.Sleep:
+                    args = string.Empty;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (force && operation != ShutDownOperation.Hibernate && operation != ShutDownOperation.SignOut)
+            if (!string.IsNullOrEmpty(args))
             {
-                args += " -f";
-            }
-
-            if (operation != ShutDownOperation.SignOut && operation != ShutDownOperation.Hibernate)
-            {
-                args += " -t 0";
+                args += (force ? " -f" : string.Empty) + " -t 0";
             }
 
             return args;
         }
     }
-
 }

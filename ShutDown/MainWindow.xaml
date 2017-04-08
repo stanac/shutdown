@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Shut down"
         Height="400"
-        Width="525"
+        Width="569.068"
         WindowStyle="None"
         ResizeMode="NoResize">
     <Window.DataContext>
@@ -101,6 +101,11 @@
                                     Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=SignOut}"
                                     Command="{Binding SelectOperationCommand}"
                                     CommandParameter="SignOut" />
+                            <Button Style="{StaticResource BtnSelect}" 
+                                    Content="Sleep" 
+                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=Sleep}" 
+                                    Command="{Binding SelectOperationCommand}" 
+                                    CommandParameter="Sleep" /> 
                         </StackPanel>
                     </Grid>
 
