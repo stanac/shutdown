@@ -3,6 +3,7 @@ using ShutDown.Models;
 using System;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ShutDown.MachineState;
 
 namespace ShutDown
 {
@@ -16,6 +17,7 @@ namespace ShutDown
         private ICommand _cancelShutDownCommand;
         private ICommand _showSettingsCommand;
         private ICommand _hideSettingsCommand;
+        private readonly IModifyMachineStateService _modifyMachineStateService;
         private int _delayMinutes = 60;
         private bool _shutDownInProgress;
         private string _shutDownRemainingTime;
@@ -39,9 +41,13 @@ namespace ShutDown
             MinMinutes = settings.MinMinutes;
             MaxMinutes = settings.MaxMinutes;
             Force = settings.DefaultForce;
-            
+
             _closeToTray = settings.CloseToTray;
             _blinkTrayIcon = settings.BlinkTrayIcon;
+
+            IExecutor shutdownExecutor = new ShutdownExecutor();
+            IExecutor standbyExecutor = new StandbyExecutor();
+            _modifyMachineStateService = new ModifyMachineStateService(shutdownExecutor, standbyExecutor);
 
             DoesStartWithWindows = StartWithWindows.IsSet();
         }
@@ -242,7 +248,7 @@ namespace ShutDown
             };
             _timer.Start();
             string opName = Operation.GetOperationName(Force);
-            
+
             opName += " in:";
             OperationName = opName;
             ShutDownInProgress = true;
@@ -263,7 +269,7 @@ namespace ShutDown
                 if (remaining.TotalSeconds > DelayMinutes * 60)
                 {
                     _timer.Stop();
-                    ShutDownHelper.ExecuteShutDownOperation(Operation, Force);
+                    _modifyMachineStateService.ModifyMachineState(Operation, Force);
                     RaiseCloseApp();
                 }
                 else
