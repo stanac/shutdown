@@ -4,11 +4,16 @@ using System;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ShutDown.MachineState;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Linq;
 
 namespace ShutDown
 {
     public class MainViewModel : ObservableObject
     {
+        #region private
+
         private ShutDownOperation _operation = ShutDownOperation.ShutDown;
         private ICommand _selectOperationCommand;
         private ICommand _addDelayCommand;
@@ -17,6 +22,11 @@ namespace ShutDown
         private ICommand _cancelShutDownCommand;
         private ICommand _showSettingsCommand;
         private ICommand _hideSettingsCommand;
+        private ICommand _showNewPatternViewCommand;
+        private ICommand _saveNewPatternCommand;
+        private ICommand _cancelNewPatternCommand;
+        private ICommand _deletePatternCommand;
+        private ICommand _startFromPatternCommand;
         private readonly IModifyMachineStateService _modifyMachineStateService;
         private int _delayMinutes = 60;
         private bool _shutDownInProgress;
@@ -29,10 +39,15 @@ namespace ShutDown
         private bool _doesStartWithWindows;
         private bool _blinkTrayIcon;
         private bool _preventShutDown = PreventShutDownHelper.Prevent;
+        private string _newPatternName;
+        private bool _newPatternViewVisible;
+        private string _newPatternDescription;
+
+        #endregion
+
         public TrayIcon TheTrayIcon = new TrayIcon();
-
         public event EventHandler CloseApp;
-
+        
         public MainViewModel()
         {
             var settings = Settings.Instance;
@@ -50,7 +65,13 @@ namespace ShutDown
             _modifyMachineStateService = new ModifyMachineStateService(shutdownExecutor, standbyExecutor);
 
             DoesStartWithWindows = StartWithWindows.IsSet();
+            foreach (var item in PatternStore.Instance.GetPatterns())
+            {
+                Patterns.Add(item);
+            }
         }
+
+        #region props
 
         public int MinMinutes { get; private set; }
         public int MaxMinutes { get; private set; }
@@ -159,7 +180,34 @@ namespace ShutDown
                 }
             }
         }
+        public string NewPatternName
+        {
+            get { return _newPatternName; }
+            set
+            {
+                _newPatternName = value ?? "";
+                RaisePropertyChanged(nameof(NewPatternName));
+            }
+        }
+        public string NewPatternDescription
+        {
+            get { return _newPatternDescription; }
+            set
+            {
+                _newPatternDescription = value;
+                RaisePropertyChanged(nameof(NewPatternDescription));
+            }
+        }
 
+        public bool NewPatternViewVisible
+        {
+            get { return _newPatternViewVisible; }
+            set
+            {
+                _newPatternViewVisible = value;
+                RaisePropertyChanged(nameof(NewPatternViewVisible));
+            }
+        }
         public ShutDownOperation Operation
         {
             get { return _operation; }
@@ -172,7 +220,6 @@ namespace ShutDown
                 }
             }
         }
-
         public int DelayMinutes
         {
             get { return _delayMinutes; }
@@ -188,7 +235,6 @@ namespace ShutDown
                 }
             }
         }
-
         public string DelayText
         {
             get
@@ -197,6 +243,11 @@ namespace ShutDown
                 return $"{Math.Floor(ts.TotalHours).ToString("00")}h {ts.Minutes.ToString("00")}min";
             }
         }
+        public ObservableCollection<PatternModel> Patterns { get; } = new ObservableCollection<PatternModel>();
+
+        #endregion
+
+        #region commands
 
         public ICommand SelectOperationCommand => _selectOperationCommand ?? (_selectOperationCommand = new Command<string>(SelectOperation));
 
@@ -211,6 +262,16 @@ namespace ShutDown
         public ICommand ShowSettingsCommand => _showSettingsCommand ?? (_showSettingsCommand = new Command(ShowSettings));
 
         public ICommand HideSettingsCommand => _hideSettingsCommand ?? (_hideSettingsCommand = new Command(HideSettings));
+
+        public ICommand ShowNewPatternViewCommand => _showNewPatternViewCommand ?? (_showNewPatternViewCommand = new Command(ShowNewPatternView));
+
+        public ICommand SavePatternCommand => _saveNewPatternCommand ?? (_saveNewPatternCommand = new Command(SaveNewPattern));
+
+        public ICommand CancelNewPatternCommand => _cancelNewPatternCommand ?? (_cancelNewPatternCommand = new Command(CancelNewPattern));
+
+        public ICommand DeletePatternCommand => _deletePatternCommand ?? (_deletePatternCommand = new Command<Guid>(DeletePattern));
+
+        public ICommand StartFromPatternCommand => _startFromPatternCommand ?? (_startFromPatternCommand = new Command<Guid>(StartFromPattern));
 
         private void SelectOperation(string operation)
         {
@@ -302,5 +363,81 @@ namespace ShutDown
                 handler(this, EventArgs.Empty);
             }
         }
+
+        private void ShowNewPatternView()
+        {
+            var pattern = new PatternModel
+            {
+                DelayInMinutes = DelayMinutes,
+                Force = Force,
+                Name = NewPatternName,
+                Operation = Operation
+            };
+
+            var existingPattern = Patterns.FirstOrDefault(x => x.Description == pattern.Description);
+            if (existingPattern != null)
+            {
+                MessageBox.Show($"There is already a pattern with same setting called '{existingPattern.Name}'", "Warning", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                return;
+            }
+
+
+            NewPatternName = Operation.GetOperationName(Force, true) + " " + TimeSpan.FromMinutes(DelayMinutes).ToFormatedString();
+            NewPatternDescription = Operation.GetOperationName(Force) + " " + TimeSpan.FromMinutes(DelayMinutes).ToFormatedString();
+            NewPatternViewVisible = true;
+        }
+
+        private void SaveNewPattern()
+        {
+            if (string.IsNullOrWhiteSpace(NewPatternName))
+            {
+                MessageBox.Show("Please enter the pattern name.", "Warning", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                return;
+            }
+
+            var pattern = new PatternModel
+            {
+                DelayInMinutes = DelayMinutes,
+                Force = Force,
+                Name = NewPatternName,
+                Operation = Operation
+            };
+
+            Patterns.Add(pattern);
+            PatternStore.Instance.SetPatterns(Patterns);
+            NewPatternViewVisible = false;
+        }
+
+        private void CancelNewPattern()
+        {
+            NewPatternViewVisible = false;
+        }
+
+        private void DeletePattern(Guid id)
+        {
+            var toRemove = Patterns.FirstOrDefault(x => x.Id == id);
+            if (toRemove != null)
+            {
+                if (MessageBox.Show($"Are you sure you want to delete pattern '{toRemove.Name}'?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    Patterns.Remove(toRemove);
+                    PatternStore.Instance.SetPatterns(Patterns);
+                }
+            }
+        }
+
+        private void StartFromPattern(Guid id)
+        {
+            var pattern = Patterns.FirstOrDefault(x => x.Id == id);
+            if (pattern != null)
+            {
+                Force = pattern.Force;
+                Operation = pattern.Operation;
+                DelayMinutes = pattern.DelayInMinutes;
+                StartShutDown();
+            }
+        }
+
+        #endregion
     }
 }

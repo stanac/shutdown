@@ -1,10 +1,6 @@
 ﻿using ShutDown.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace ShutDown
@@ -27,7 +23,7 @@ namespace ShutDown
                 }
                 SetThreadExecutionState(state);
             };
-            timer.Interval = TimeSpan.FromSeconds(10);
+            timer.Interval = TimeSpan.FromSeconds(30);
             timer.Start();
         }
 
@@ -59,7 +55,7 @@ namespace ShutDown
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
-        [FlagsAttribute]
+        [Flags]
         private enum EXECUTION_STATE : uint
         {
             ES_AWAYMODE_REQUIRED = 0x00000040,

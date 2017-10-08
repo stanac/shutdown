@@ -71,11 +71,6 @@ namespace ShutDown
             }
         }
 
-        private void AddPatternClick(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Coming up in v1.1", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         private void HelpBtnClick(object sender, RoutedEventArgs e)
         {
             Process.Start("http://stanac.github.io/shutdown/");

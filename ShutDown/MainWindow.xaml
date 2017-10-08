@@ -7,12 +7,13 @@
         mc:Ignorable="d"
         Title="Shut down"
         Height="400"
-        Width="569.068"
+        Width="570"
         WindowStyle="None"
         ResizeMode="NoResize">
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
+    
     <Border BorderBrush="Black"
             BorderThickness="1">
         <Grid>
@@ -228,8 +229,13 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
                     
                     <TextBlock Text="Patterns"
+                               Grid.ColumnSpan="2"
                                Style="{StaticResource H1}" />
 
                     <Button Grid.Row="1"
@@ -237,15 +243,47 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             Content="+"
-                            Click="AddPatternClick"/>
+                            Margin="7, 0, 0, 0"
+                            Command="{Binding ShowNewPatternViewCommand}" />
 
+                    <ItemsControl Grid.Row="1" Grid.Column="1" Margin="5, 0, 0, 0"
+                              ItemsSource="{Binding Patterns}">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <WrapPanel  Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" 
+                                            FlowDirection="LeftToRight" IsItemsHost="true">
+                                </WrapPanel>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="2">
+                                    <Button Content="{Binding Name}" 
+                                            ToolTip="{Binding Description}"
+                                            Padding="2, 2, 4, 2"
+                                            BorderThickness="0"
+                                            CommandParameter="{Binding Id}"
+                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                      AncestorType={x:Type Window}}, Path=DataContext.StartFromPatternCommand}"
+                                            />
+                                    <Button Content="X"
+                                            Margin="-1, 0, 0, 0"
+                                            ToolTip="Delete pattern"
+                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                      AncestorType={x:Type Window}}, Path=DataContext.DeletePatternCommand}"
+                                            CommandParameter="{Binding Id}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
 
             </Grid>
-
+            
             <Grid Grid.RowSpan="2"
                   Visibility="{Binding ShutDownInProgress, Converter={StaticResource BoolToVisibilityConverter}}"
-                  Margin="10, 40, 10, 10">
+                  Margin="4, 40, 4, 4">
                 <Grid.Background>
                     <SolidColorBrush Color="Silver"
                                      Opacity="0.95" />
@@ -280,8 +318,59 @@
             </Grid>
 
             <Grid Grid.RowSpan="2"
+                  Visibility="{Binding NewPatternViewVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                  Margin="4, 40, 4, 4">
+                <Grid.Background>
+                    <SolidColorBrush Color="Silver"
+                                     Opacity="0.95" />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource H1}">New Pattern</TextBlock>
+                    <TextBlock Grid.Row="1">
+                        New pattern will be saved with settings chosen on main screen. (
+                        <Run Text="{Binding NewPatternDescription}"></Run>
+                        )
+                    </TextBlock>
+                    <TextBlock Grid.Row="3">Please type new pattern name:</TextBlock>
+                    <TextBox Grid.Row="4"
+                             Margin="0, 5"
+                             Width="200"
+                             HorizontalAlignment="Left"
+                             Text="{Binding NewPatternName}" />
+                </Grid>
+                
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            VerticalAlignment="Center"
+                            Width="215">
+                <Button Content="Save new pattern"
+                        Style="{StaticResource BtnSelect}"
+                        Width="120"
+                        Command="{Binding SavePatternCommand}" />
+                    <Button Content="Cancel"
+                        Style="{StaticResource BtnSelect}"
+                        Margin="15, 0, 0, 0"
+                        Command="{Binding CancelNewPatternCommand}" />
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.RowSpan="2"
                   Visibility="{Binding SettingsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                  Margin="10, 40, 10, 10">
+                  Margin="4, 40, 4, 4">
                 <Grid.Background>
                     <SolidColorBrush Color="Silver"
                                      Opacity="0.95" />
@@ -322,6 +411,7 @@
                         Command="{Binding HideSettingsCommand}" />
 
             </Grid>
+
         </Grid>
     </Border>
 </Window>

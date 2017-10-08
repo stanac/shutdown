@@ -13,25 +13,31 @@ namespace ShutDown.Models
 
     public static class ShutDownOperationMethods
     {
-        public static string GetOperationName(this ShutDownOperation op, bool force)
+        public static string GetOperationName(this ShutDownOperation op, bool force, bool useShortName = false)
         {
             string opName;
             switch (op)
             {
                 case ShutDownOperation.Hibernate:
-                    opName = "Hibernate";
+                    opName = useShortName ? "H" : "Hibernate";
                     break;
                 case ShutDownOperation.Restart:
-                    opName = force ? "Forced restart" : "Restart";
+                    if (useShortName)
+                        opName = force ? "F-R" : "R";
+                    else
+                        opName = force ? "Forced restart" : "Restart";
                     break;
                 case ShutDownOperation.ShutDown:
-                    opName = force ? "Forced shut down" : "Shut down";
+                    if (useShortName)
+                        opName = force ? "F-SD" : "SD";
+                    else
+                        opName = force ? "Forced shut down" : "Shut down";
                     break;
                 case ShutDownOperation.SignOut:
-                    opName = "Log off";
+                    opName = useShortName ? "LO" : "Log off";
                     break;
                 case ShutDownOperation.Sleep:
-                    opName = "Sleep";
+                    opName = useShortName ? "S" : "Sleep";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

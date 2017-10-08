@@ -80,8 +80,10 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\OperationToColorConverter.cs" />
     <Compile Include="Data\DataBase.cs" />
+    <Compile Include="Data\PatternStore.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\Log.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="MachineState\IExecutor.cs" />
     <Compile Include="MachineState\IModifyMachineStateService.cs" />
     <Compile Include="MachineState\ModifyMachineStateService.cs" />
@@ -110,7 +112,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ShutDownOperation.cs" />
-    <Compile Include="Models\ShutDownModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
