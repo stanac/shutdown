@@ -1,4 +1,5 @@
-﻿using ShutDown.Data;
+﻿using HandyControl.Controls;
+using ShutDown.Data;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -9,7 +10,7 @@ namespace ShutDown
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : WindowBorderless
     {
         public MainWindow()
         {
@@ -47,12 +48,12 @@ namespace ShutDown
             base.OnInitialized(e);
         }
 
-        private void MinBtnClick(object sender, RoutedEventArgs e)
+        private void HelpBtnClick(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Minimized;
+            Process.Start("http://stanac.github.io/shutdown/");
         }
 
-        private void CloseBtnClick(object sender, RoutedEventArgs e)
+        private void WindowBorderless_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var vm = (DataContext as MainViewModel);
             if (Settings.Instance.CloseToTray)
@@ -67,14 +68,8 @@ namespace ShutDown
             else
             {
                 vm.TheTrayIcon.Dispose();
-                Close();
+                Environment.Exit(0);
             }
         }
-
-        private void HelpBtnClick(object sender, RoutedEventArgs e)
-        {
-            Process.Start("http://stanac.github.io/shutdown/");
-        }
-        
     }
 }
