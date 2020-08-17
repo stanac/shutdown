@@ -38,7 +38,8 @@ namespace ShutDown
         private DateTime _startTime;
         private bool _doesStartWithWindows;
         private bool _blinkTrayIcon;
-        private bool _preventShutDown = PreventShutDownHelper.Prevent;
+        private bool _preventShutDown = PreventShutDownHelper.PreventShutDown;
+        private bool _preventLock = PreventShutDownHelper.PreventLock;
         private string _newPatternName;
         private bool _newPatternViewVisible;
         private string _newPatternDescription;
@@ -175,8 +176,22 @@ namespace ShutDown
                 if (value != _preventShutDown)
                 {
                     _preventShutDown = value;
-                    PreventShutDownHelper.Prevent = value;
+                    PreventShutDownHelper.PreventShutDown = value;
                     RaisePropertyChanged(nameof(PreventShutDown));
+                }
+            }
+        }
+
+        public bool PreventLock
+        {
+            get { return _preventLock; }
+            set
+            {
+                if (value != _preventLock)
+                {
+                    _preventLock = value;
+                    PreventShutDownHelper.PreventLock = value;
+                    RaisePropertyChanged(nameof(PreventLock));
                 }
             }
         }

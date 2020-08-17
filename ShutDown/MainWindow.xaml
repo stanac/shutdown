@@ -399,6 +399,10 @@
                                Margin="5"
                               IsChecked="{Binding PreventShutDown}"
                               />
+                    <CheckBox Content="Prevent screen trurning off and lock due to inactivity while app is running" 
+                               Margin="5"
+                              IsChecked="{Binding PreventLock}"
+                              />
                     <CheckBox Content="Blink tray icon when delayed operation is in progress"
                               IsChecked="{Binding BlinkTrayIcon}" 
                               Margin="5"/>

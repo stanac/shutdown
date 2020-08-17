@@ -22,7 +22,7 @@ namespace ShutDown
         {
             _ni = new NotifyIcon();
             _ni.Visible = true;
-            _ni.Icon = PreventShutDownHelper.Prevent ? GetIcon(IconGreenName) : GetIcon(IconRedName);
+            _ni.Icon = PreventShutDownHelper.PreventShutDown ? GetIcon(IconGreenName) : GetIcon(IconRedName);
             _ni.BalloonTipTitle = "Shut down";
             _ni.BalloonTipText = "Shut down is in progress";
             _ni.Text = "Shut Down";
@@ -108,12 +108,12 @@ namespace ShutDown
             if (_isShutDownInProgress && Settings.Instance.BlinkTrayIcon)
             {
                 if (_currentIcon != IconRedName) _ni.Icon = GetIcon(IconRedName);
-                else if (PreventShutDownHelper.Prevent) _ni.Icon = GetIcon(IconGreenName);
+                else if (PreventShutDownHelper.PreventShutDown) _ni.Icon = GetIcon(IconGreenName);
                 else _ni.Icon = GetIcon(IconPlainName);
             }
             else
             {
-                if (PreventShutDownHelper.Prevent)
+                if (PreventShutDownHelper.PreventShutDown)
                 {
                     if (_currentIcon != IconRedName) _ni.Icon = GetIcon(IconGreenName);
                 }
