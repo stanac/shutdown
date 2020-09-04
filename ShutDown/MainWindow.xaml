@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutDown"
         mc:Ignorable="d"
-        Title="Shut down"
+        Title="{Binding Title}"
         Height="400"
         Width="570"
         WindowStyle="None"
@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="ShutDown"
+                <TextBlock Text="{Binding Title}"
                            Style="{StaticResource H1}"
                            HorizontalAlignment="Center" />
                 <StackPanel Grid.Column="1"

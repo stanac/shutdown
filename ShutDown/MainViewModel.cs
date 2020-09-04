@@ -51,6 +51,7 @@ namespace ShutDown
         
         public MainViewModel()
         {
+            Title = $"Shut Down ({typeof(MainViewModel).Assembly.GetName().Version})";
             var settings = Settings.Instance;
             Operation = settings.DefaultOperation;
             DelayMinutes = settings.DefaultDelay;
@@ -73,6 +74,8 @@ namespace ShutDown
         }
 
         #region props
+
+        public string Title { get; }
 
         public int MinMinutes { get; private set; }
         public int MaxMinutes { get; private set; }
