@@ -234,7 +234,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     
-                    <TextBlock Text="Patterns"
+                    <TextBlock Text="Predefined settings"
                                Grid.ColumnSpan="2"
                                Style="{StaticResource H1}" />
 
@@ -399,7 +399,7 @@
                                Margin="5"
                               IsChecked="{Binding PreventShutDown}"
                               />
-                    <CheckBox Content="Prevent screen trurning off and lock due to inactivity while app is running" 
+                    <CheckBox Content="Prevent screen turning off and lock due to inactivity while app is running" 
                                Margin="5"
                               IsChecked="{Binding PreventLock}"
                               />
