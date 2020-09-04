@@ -41,7 +41,7 @@ namespace ShutDown
                 icon.Dispose();
                 Close();
             };
-            icon.OnOpen = () => { Show(); };
+            icon.OnOpen = () => { Show(); Application.Current.MainWindow.Activate(); };
             icon.OnCancel = () => { vm.CancelShutDownCommand.Execute(null); };
 
             base.OnInitialized(e);

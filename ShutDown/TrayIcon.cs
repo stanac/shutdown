@@ -14,15 +14,23 @@ namespace ShutDown
         private DispatcherTimer _timer;
         private string _currentIcon;
 
-        private const string IconPlainName = "icon.ico";
+        private System.Drawing.Icon _greenIcon;
+        private System.Drawing.Icon _redIcon;
+        private System.Drawing.Icon _orangeIcon;
+        
+        private const string IconOrangeName = "icon.ico";
         private const string IconRedName = "icon_red.ico";
         private const string IconGreenName = "icon_green.ico";
 
         public TrayIcon()
         {
+            _orangeIcon = GetIcon(IconOrangeName);
+            _redIcon = GetIcon(IconRedName);
+            _greenIcon = GetIcon(IconGreenName);
+
             _ni = new NotifyIcon();
             _ni.Visible = true;
-            _ni.Icon = PreventShutDownHelper.PreventShutDown ? GetIcon(IconGreenName) : GetIcon(IconRedName);
+            _ni.Icon = PreventShutDownHelper.PreventShutDown ? _greenIcon : _redIcon;
             _ni.BalloonTipTitle = "Shut down";
             _ni.BalloonTipText = "Shut down is in progress";
             _ni.Text = "Shut Down";
@@ -42,6 +50,8 @@ namespace ShutDown
                 OnTimerTick();
             };
             _timer.Start();
+
+            SetShutDownInProgress(false);
         }
 
         public Action OnExit { get; set; }
@@ -57,14 +67,13 @@ namespace ShutDown
         public void SetShutDownInProgress(bool isShutDownInProgress)
         {
             _isShutDownInProgress = isShutDownInProgress;
-            _ni.Icon = GetIcon(IconPlainName);
+            _ni.Icon = PreventShutDownHelper.PreventShutDown ? _greenIcon : _orangeIcon;
             
             SetContextMenu(isShutDownInProgress);
         }
 
         private System.Drawing.Icon GetIcon(string iconName)
         {
-            _currentIcon = iconName;
             if (_iconStream != null)
             {
                 _iconStream.Dispose();
@@ -107,20 +116,55 @@ namespace ShutDown
         {
             if (_isShutDownInProgress && Settings.Instance.BlinkTrayIcon)
             {
-                if (_currentIcon != IconRedName) _ni.Icon = GetIcon(IconRedName);
-                else if (PreventShutDownHelper.PreventShutDown) _ni.Icon = GetIcon(IconGreenName);
-                else _ni.Icon = GetIcon(IconPlainName);
+                if (IsCurrentIconRed)
+                {
+                    if (PreventShutDownHelper.PreventShutDown) SetGreenIcon();
+                    else SetOrangeIcon();
+                }
+                else
+                {
+                    SetRedIcon();
+                }
             }
             else
             {
                 if (PreventShutDownHelper.PreventShutDown)
                 {
-                    if (_currentIcon != IconRedName) _ni.Icon = GetIcon(IconGreenName);
+                    SetGreenIcon();
                 }
                 else
                 {
-                    if (_currentIcon != IconPlainName) _ni.Icon = GetIcon(IconPlainName);
+                    SetOrangeIcon();
                 }
+            }
+        }
+
+        private bool IsCurrentIconRed => _currentIcon == IconRedName;
+
+        private void SetGreenIcon()
+        {
+            if (_currentIcon != IconGreenName)
+            {
+                _ni.Icon = _greenIcon;
+                _currentIcon = IconGreenName;
+            }
+        }
+
+        private void SetRedIcon()
+        {
+            if (_currentIcon != IconRedName)
+            {
+                _ni.Icon = _redIcon;
+                _currentIcon = IconRedName;
+            }
+        }
+
+        private void SetOrangeIcon()
+        {
+            if (_currentIcon != IconOrangeName)
+            {
+                _ni.Icon = _orangeIcon;
+                _currentIcon = IconOrangeName;
             }
         }
 
