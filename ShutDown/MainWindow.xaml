@@ -403,6 +403,9 @@
                                Margin="5"
                               IsChecked="{Binding PreventLock}"
                               />
+                    <CheckBox Content="JiggleMouse every 3 minutes (unnoticeable to user)"
+                              IsChecked="{Binding JiggleMouse}"
+                              Margin="5"/>
                     <CheckBox Content="Blink tray icon when delayed operation is in progress"
                               IsChecked="{Binding BlinkTrayIcon}" 
                               Margin="5"/>

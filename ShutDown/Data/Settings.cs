@@ -22,6 +22,7 @@ namespace ShutDown.Data
         public List<PatternModel> Patterns { get; set; }
         public bool PreventShutDown { get; set; }
         public bool PreventLock { get; set; }
+        public bool JiggleMouse { get; set; }
 
         private Settings()
         {
@@ -98,6 +99,10 @@ namespace ShutDown.Data
                     {
                         Instance.PreventLock = bool.Parse(line.Split(':')[1]);
                     }
+                    else if (line.StartsWith($"{nameof(JiggleMouse)}:"))
+                    {
+                        Instance.JiggleMouse = bool.Parse(line.Split(':')[1]);
+                    }
                     else if (line.StartsWith("p:"))
                     {
                         Instance.Patterns.Add(PatternModel.Parse(line));
@@ -136,6 +141,7 @@ namespace ShutDown.Data
 {nameof(BlinkTrayIcon)}:{BlinkTrayIcon}
 {nameof(PreventShutDown)}:{PreventShutDown}
 {nameof(PreventLock)}:{PreventLock}
+{nameof(JiggleMouse)}:{JiggleMouse}
 ";
             foreach (var p in Patterns)
             {

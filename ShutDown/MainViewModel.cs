@@ -43,7 +43,8 @@ namespace ShutDown
         private string _newPatternName;
         private bool _newPatternViewVisible;
         private string _newPatternDescription;
-
+        private bool _jiggleMouse;
+        
         #endregion
 
         public TrayIcon TheTrayIcon = new TrayIcon();
@@ -51,6 +52,8 @@ namespace ShutDown
         
         public MainViewModel()
         {
+            MouseJigglerHelper.Start();
+
             Title = $"Shut Down ({typeof(MainViewModel).Assembly.GetName().Version})";
             var settings = Settings.Instance;
             Operation = settings.DefaultOperation;
@@ -58,6 +61,7 @@ namespace ShutDown
             MinMinutes = settings.MinMinutes;
             MaxMinutes = settings.MaxMinutes;
             Force = settings.DefaultForce;
+            JiggleMouse = settings.JiggleMouse;
 
             _closeToTray = settings.CloseToTray;
             _blinkTrayIcon = settings.BlinkTrayIcon;
@@ -79,7 +83,6 @@ namespace ShutDown
 
         public int MinMinutes { get; private set; }
         public int MaxMinutes { get; private set; }
-        public int DefaultMinutes { get; private set; }
         public bool Force { get; private set; }
         public bool ShutDownInProgress
         {
@@ -184,7 +187,21 @@ namespace ShutDown
                 }
             }
         }
-
+        public bool JiggleMouse
+        {
+            get => _jiggleMouse;
+            set
+            {
+                if (value != _jiggleMouse)
+                {
+                    _jiggleMouse = value;
+                    RaisePropertyChanged(nameof(JiggleMouse));
+                    Settings.Instance.JiggleMouse = value;
+                    Settings.Instance.Save();
+                }
+            }
+        }
+        
         public bool PreventLock
         {
             get { return _preventLock; }
@@ -359,7 +376,7 @@ namespace ShutDown
             }
             catch
             {
-
+                //
             }
         }
 

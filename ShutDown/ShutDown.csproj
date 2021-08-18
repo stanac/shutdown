@@ -84,11 +84,13 @@
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\Log.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="User32\InteropTypes.cs" />
     <Compile Include="MachineState\IExecutor.cs" />
     <Compile Include="MachineState\IModifyMachineStateService.cs" />
     <Compile Include="MachineState\ModifyMachineStateService.cs" />
     <Compile Include="MachineState\ShutdownExecutor.cs" />
     <Compile Include="MachineState\StandbyExecutor.cs" />
+    <Compile Include="MouseJigglerHelper.cs" />
     <Compile Include="PreventShutDownHelper.cs" />
     <Compile Include="TrayIconContextMenuItem.cs" />
     <Compile Include="Models\PatternModel.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="ShutDownHelper.cs" />
     <Compile Include="StartWithWindows.cs" />
     <Compile Include="TrayIcon.cs" />
+    <Compile Include="User32\User32.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -157,6 +160,7 @@
   <ItemGroup>
     <Resource Include="icon_green.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
