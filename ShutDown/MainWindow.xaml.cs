@@ -20,6 +20,8 @@ namespace ShutDown
             {
                 Hide();
             }
+
+
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -75,6 +77,5 @@ namespace ShutDown
         {
             Process.Start("https://stanac.github.io/shutdown/");
         }
-        
     }
 }

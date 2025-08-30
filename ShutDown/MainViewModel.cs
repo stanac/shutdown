@@ -12,6 +12,8 @@ namespace ShutDown
 {
     public class MainViewModel : ObservableObject
     {
+        internal const string WindowTitle = "Shut Down";
+
         #region private
 
         private ShutDownOperation _operation = ShutDownOperation.ShutDown;
@@ -54,7 +56,7 @@ namespace ShutDown
         {
             MouseJigglerHelper.Start();
 
-            Title = $"Shut Down ({typeof(MainViewModel).Assembly.GetName().Version})";
+            Title = WindowTitle;
             var settings = Settings.Instance;
             Operation = settings.DefaultOperation;
             DelayMinutes = settings.DefaultDelay;

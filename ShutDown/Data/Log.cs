@@ -15,7 +15,8 @@ namespace ShutDown.Data
             string title = "Application error";
             var guid = Error(message, ex);
             string id = guid.ToString();
-            if (guid != default(Guid))
+
+            if (guid != Guid.Empty)
             {
                 string content = title + " occurred and it was logged on you disk with following id: " + id;
                 MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -25,6 +26,22 @@ namespace ShutDown.Data
                 string content = "Error occurred and were not able to log it, error message: " + (message ?? "message-not-provided") +
                     "Error details: " + GetExceptionText(ex);
                 MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public static void Debug(string message)
+        {
+            if (!App.IsDebug)
+            {
+                return;
+            }
+
+            message = $"DBG - ProcessId: {App.ProcessId} - {DateTime.Now:s} : {message}";
+            
+            lock (_sync)
+            {
+                string filePath = GetFileName();
+                File.AppendAllLines(filePath, new[] { message });
             }
         }
 
@@ -41,7 +58,7 @@ namespace ShutDown.Data
                     {
                         writer.WriteLine();
                         writer.WriteLine("---------------------------------------------------- " + id);
-                        writer.WriteLine("Error - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss - " + (message ?? "no-message-provided")));
+                        writer.WriteLine($"Error - ProcessId: {App.ProcessId} - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss - " + (message ?? "no-message-provided")));
                         writer.WriteLine(GetExceptionText(ex));
                         writer.Flush();
                     }

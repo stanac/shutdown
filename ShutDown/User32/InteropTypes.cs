@@ -478,16 +478,6 @@ namespace ShutDown.User32
         KEY_Y = 0x59,
 
         ///<summary>
-        ///Z key
-        ///</summary>
-        KEY_Z = 0x5A,
-
-        ///<summary>
-        ///Left Windows key (Microsoft Natural keyboard)
-        ///</summary>
-        LWIN = 0x5B,
-
-        ///<summary>
         ///Right Windows key (Natural keyboard)
         ///</summary>
         RWIN = 0x5C,
