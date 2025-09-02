@@ -87,7 +87,9 @@
     <Compile Include="Data\PatternStore.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\Log.cs" />
+    <Compile Include="Data\VersionCheck.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\AppVersion.cs" />
     <Compile Include="User32\InteropTypes.cs" />
     <Compile Include="MachineState\IExecutor.cs" />
     <Compile Include="MachineState\IModifyMachineStateService.cs" />

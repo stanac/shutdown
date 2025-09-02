@@ -148,7 +148,7 @@ namespace ShutDown.Data
                 s += p.ToSerializableString() + @"
 ";
             }
-            File.WriteAllText(_filePath, s);
+            File.WriteAllText(_filePath, s.Trim());
         }
     }
 }

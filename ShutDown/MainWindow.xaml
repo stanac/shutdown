@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ShutDown"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="400"
+        Height="430"
         Width="570"
         WindowStyle="None"
         ResizeMode="NoResize">
@@ -56,6 +56,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
@@ -279,9 +280,23 @@
                     </ItemsControl>
                 </Grid>
 
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal">
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
+                        <Run>Version:</Run>
+                        <Run Text="{Binding Version, Mode=OneWay}"></Run>
+                    </TextBlock>
+
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"
+                               Visibility="{Binding IsNewVersionAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Hyperlink x:Name="NewVersionLink" NavigateUri="https://github.com/stanac/shutdown/releases">New Version Available</Hyperlink>
+                    </TextBlock>
+
+                </StackPanel>
+
             </Grid>
             
-            <Grid Grid.RowSpan="2"
+            <Grid Grid.RowSpan="3"
                   Visibility="{Binding ShutDownInProgress, Converter={StaticResource BoolToVisibilityConverter}}"
                   Margin="4, 40, 4, 4">
                 <Grid.Background>
@@ -317,7 +332,7 @@
 
             </Grid>
 
-            <Grid Grid.RowSpan="2"
+            <Grid Grid.RowSpan="3"
                   Visibility="{Binding NewPatternViewVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                   Margin="4, 40, 4, 4">
                 <Grid.Background>
@@ -351,12 +366,12 @@
                              HorizontalAlignment="Left"
                              Text="{Binding NewPatternName}" />
                 </Grid>
-                
+
                 <StackPanel Orientation="Horizontal"
                             Grid.Row="1"
                             VerticalAlignment="Center"
                             Width="215">
-                <Button Content="Save new pattern"
+                    <Button Content="Save new pattern"
                         Style="{StaticResource BtnSelect}"
                         Width="120"
                         Command="{Binding SavePatternCommand}" />
@@ -368,7 +383,7 @@
 
             </Grid>
 
-            <Grid Grid.RowSpan="2"
+            <Grid Grid.RowSpan="3"
                   Visibility="{Binding SettingsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                   Margin="4, 40, 4, 4">
                 <Grid.Background>
@@ -376,8 +391,8 @@
                                      Opacity="0.95" />
                 </Grid.Background>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Margin="10"
@@ -403,16 +418,20 @@
                                Margin="5"
                               IsChecked="{Binding PreventLock}"
                               />
-                    <CheckBox Content="JiggleMouse every 3 minutes (unnoticeable to user)"
+                    <CheckBox Content="Jiggle Mouse every 3 minutes (unnoticeable to user)"
                               IsChecked="{Binding JiggleMouse}"
                               Margin="5"/>
                     <CheckBox Content="Blink tray icon when delayed operation is in progress"
                               IsChecked="{Binding BlinkTrayIcon}" 
                               Margin="5"/>
+                    <CheckBox Content="Check for new version weekly"
+                              IsChecked="{Binding CheckForNewVersionWeekly}" 
+                              Margin="5"/>
                 </StackPanel>
 
                 <Button Grid.Row="2"
                         Content="Close"
+                        Margin="0, 20"
                         Style="{StaticResource BtnSelect}"
                         VerticalAlignment="Center"
                         Command="{Binding HideSettingsCommand}" />

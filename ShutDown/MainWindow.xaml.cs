@@ -1,5 +1,6 @@
 ﻿using ShutDown.Data;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -11,6 +12,8 @@ namespace ShutDown
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool _exiting;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -20,8 +23,6 @@ namespace ShutDown
             {
                 Hide();
             }
-
-
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -40,11 +41,20 @@ namespace ShutDown
             var icon = vm.TheTrayIcon;
             icon.OnExit = () => 
             {
-                icon.Dispose();
+                _exiting = true;
                 Close();
+                icon.Dispose();
+                
             };
             icon.OnOpen = () => { Show(); Application.Current.MainWindow.Activate(); };
             icon.OnCancel = () => { vm.CancelShutDownCommand.Execute(null); };
+
+            NewVersionLink.RequestNavigate += (sender, args) =>
+            {
+                Process.Start(args.Uri.ToString());
+            };
+
+            Closing += (sender, args) => HandleOnClosing(args);
 
             base.OnInitialized(e);
         }
@@ -56,8 +66,21 @@ namespace ShutDown
 
         private void CloseBtnClick(object sender, RoutedEventArgs e)
         {
-            var vm = (DataContext as MainViewModel);
-            if (Settings.Instance.CloseToTray)
+            Close();
+        }
+
+        private void HelpBtnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/stanac/shutdown/");
+        }
+
+        private void HandleOnClosing(CancelEventArgs args)
+        {
+            var vm = DataContext as MainViewModel;
+
+            if (vm == null) return;
+
+            if (Settings.Instance.CloseToTray && !_exiting)
             {
                 Hide();
                 if (vm.ShutDownInProgress)
@@ -65,17 +88,14 @@ namespace ShutDown
                     var message = vm.OperationName.Replace("in:", "").Trim() + " is still in progress.";
                     vm.TheTrayIcon.ShowNotification(message);
                 }
+
+                args.Cancel = true;
             }
             else
             {
                 vm.TheTrayIcon.Dispose();
-                Close();
+                args.Cancel = false;
             }
-        }
-
-        private void HelpBtnClick(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://stanac.github.io/shutdown/");
         }
     }
 }

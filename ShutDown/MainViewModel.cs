@@ -77,6 +77,8 @@ namespace ShutDown
             {
                 Patterns.Add(item);
             }
+
+            CheckForNewVersion();
         }
 
         #region props
@@ -88,7 +90,7 @@ namespace ShutDown
         public bool Force { get; private set; }
         public bool ShutDownInProgress
         {
-            get { return _shutDownInProgress; }
+            get => _shutDownInProgress;
             set
             {
                 if (value != _shutDownInProgress)
@@ -101,7 +103,7 @@ namespace ShutDown
         }
         public string ShutDownRemainingTime
         {
-            get { return _shutDownRemainingTime; }
+            get => _shutDownRemainingTime;
             set
             {
                 if (value != _shutDownRemainingTime)
@@ -113,7 +115,7 @@ namespace ShutDown
         }
         public string OperationName
         {
-            get { return _operationName; }
+            get => _operationName;
             set
             {
                 if (value != _operationName)
@@ -125,7 +127,7 @@ namespace ShutDown
         }
         public bool SettingsVisible
         {
-            get { return _settingsVisible; }
+            get => _settingsVisible;
             set
             {
                 if (_settingsVisible != value)
@@ -137,7 +139,7 @@ namespace ShutDown
         }
         public bool DoesStartWithWindows
         {
-            get { return _doesStartWithWindows; }
+            get => _doesStartWithWindows;
             set
             {
                 if (value != _doesStartWithWindows)
@@ -150,7 +152,7 @@ namespace ShutDown
         }
         public bool CloseToTray
         {
-            get { return _closeToTray; }
+            get => _closeToTray;
             set
             {
                 if (_closeToTray != value)
@@ -164,7 +166,7 @@ namespace ShutDown
         }
         public bool BlinkTrayIcon
         {
-            get { return _blinkTrayIcon; }
+            get => _blinkTrayIcon;
             set
             {
                 if (_blinkTrayIcon != value)
@@ -178,7 +180,7 @@ namespace ShutDown
         }
         public bool PreventShutDown
         {
-            get { return _preventShutDown; }
+            get => _preventShutDown;
             set
             {
                 if (value != _preventShutDown)
@@ -203,10 +205,32 @@ namespace ShutDown
                 }
             }
         }
-        
+
+        public bool CheckForNewVersionWeekly
+        {
+            get => VersionCheck.Instance.CheckForNewVersion;
+            set
+            {
+                if (value != VersionCheck.Instance.CheckForNewVersion)
+                {
+                    VersionCheck.Instance.CheckForNewVersion = value;
+                    VersionCheck.Instance.Save();
+
+                    if (value)
+                    {
+                        CheckForNewVersion();
+                    }
+                }
+            }
+        }
+
+        public string Version { get; } = AppVersion.CurrentVersion.Text;
+
+        public bool IsNewVersionAvailable { get; set; }
+
         public bool PreventLock
         {
-            get { return _preventLock; }
+            get => _preventLock;
             set
             {
                 if (value != _preventLock)
@@ -219,7 +243,7 @@ namespace ShutDown
         }
         public string NewPatternName
         {
-            get { return _newPatternName; }
+            get => _newPatternName;
             set
             {
                 _newPatternName = value ?? "";
@@ -228,7 +252,7 @@ namespace ShutDown
         }
         public string NewPatternDescription
         {
-            get { return _newPatternDescription; }
+            get => _newPatternDescription;
             set
             {
                 _newPatternDescription = value;
@@ -238,7 +262,7 @@ namespace ShutDown
 
         public bool NewPatternViewVisible
         {
-            get { return _newPatternViewVisible; }
+            get => _newPatternViewVisible;
             set
             {
                 _newPatternViewVisible = value;
@@ -247,7 +271,7 @@ namespace ShutDown
         }
         public ShutDownOperation Operation
         {
-            get { return _operation; }
+            get => _operation;
             set
             {
                 if (value != _operation)
@@ -259,7 +283,7 @@ namespace ShutDown
         }
         public int DelayMinutes
         {
-            get { return _delayMinutes; }
+            get => _delayMinutes;
             set
             {
                 if (value != _delayMinutes)
@@ -340,10 +364,7 @@ namespace ShutDown
             {
                 Interval = TimeSpan.FromMilliseconds(100)
             };
-            _timer.Tick += (s, e) =>
-            {
-                OnTimerTick();
-            };
+            _timer.Tick += (s, e) => OnTimerTick();
             _timer.Start();
             string opName = Operation.GetOperationName(Force);
 
@@ -476,5 +497,17 @@ namespace ShutDown
         }
 
         #endregion
+
+        private void CheckForNewVersion()
+        {
+            VersionCheck.Instance.Check(isAvailable =>
+            {
+                if (IsNewVersionAvailable != isAvailable)
+                {
+                    IsNewVersionAvailable = isAvailable;
+                    RaisePropertyChanged(nameof(IsNewVersionAvailable));
+                }
+            });
+        }
     }
 }
