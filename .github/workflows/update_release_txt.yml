@@ -1,4 +1,4 @@
-name: Update Release Names on GitHub Pages
+name: Update Releases File
 
 on:
   release:
