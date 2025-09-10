@@ -6,7 +6,7 @@ namespace ShutDown
     {
         public event PropertyChangedEventHandler PropertyChanged;
         
-        public void RaisePropertyChanged(string propName)
+        internal void RaisePropertyChanged(string propName)
         {
             var handler = PropertyChanged;
             if (handler != null)

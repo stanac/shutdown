@@ -1,9 +1,9 @@
-﻿using ShutDown.Data;
-using ShutDown.Models;
-using System;
+﻿using System;
 using System.Diagnostics;
+using ShutDown.Data;
+using ShutDown.Models;
 
-namespace ShutDown
+namespace ShutDown.Utils
 {
     public static class ShutDownHelper
     {

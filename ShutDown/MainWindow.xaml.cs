@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using ShutDown.Utils;
 
 namespace ShutDown
 {
@@ -18,8 +19,10 @@ namespace ShutDown
         {
             InitializeComponent();
             
+            PreventShutDownHelper.Run();
+
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length > 1 && args[1] == "/winstart" && Settings.Instance.CloseToTray)
+            if (args.Length > 1 && args[1] == "/winstart" && SettingsData.Instance.CloseToTray)
             {
                 Hide();
             }
@@ -80,7 +83,7 @@ namespace ShutDown
 
             if (vm == null) return;
 
-            if (Settings.Instance.CloseToTray && !_exiting)
+            if (SettingsData.Instance.CloseToTray && !_exiting)
             {
                 Hide();
                 if (vm.ShutDownInProgress)

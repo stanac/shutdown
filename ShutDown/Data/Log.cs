@@ -58,13 +58,19 @@ namespace ShutDown.Data
                     {
                         writer.WriteLine();
                         writer.WriteLine("---------------------------------------------------- " + id);
-                        writer.WriteLine($"Error - ProcessId: {App.ProcessId} - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss - " + (message ?? "no-message-provided")));
+                        writer.WriteLine($"Error - ProcessId: {App.ProcessId} - " +
+                                         DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss - " +
+                                                               (message ?? "no-message-provided")));
                         writer.WriteLine(GetExceptionText(ex));
                         writer.Flush();
                     }
+
                     return id;
                 }
-                catch { }
+                catch
+                {
+                    // nop
+                }
                 return Guid.Empty;
             }
         }

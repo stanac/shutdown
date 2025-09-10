@@ -1,10 +1,10 @@
-﻿using ShutDown.Data;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using ShutDown.Data;
 
-namespace ShutDown
+namespace ShutDown.Utils
 {
     public class TrayIcon : IDisposable
     {
@@ -30,7 +30,7 @@ namespace ShutDown
 
             _ni = new NotifyIcon();
             _ni.Visible = true;
-            _ni.Icon = PreventShutDownHelper.PreventShutDown ? _greenIcon : _redIcon;
+            _ni.Icon = SettingsData.Instance.PreventShutDown ? _greenIcon : _redIcon;
             _ni.BalloonTipTitle = "Shut down";
             _ni.BalloonTipText = "Shut down is in progress";
             _ni.Text = "Shut Down";
@@ -67,7 +67,7 @@ namespace ShutDown
         public void SetShutDownInProgress(bool isShutDownInProgress)
         {
             _isShutDownInProgress = isShutDownInProgress;
-            _ni.Icon = PreventShutDownHelper.PreventShutDown ? _greenIcon : _orangeIcon;
+            _ni.Icon = SettingsData.Instance.PreventShutDown ? _greenIcon : _orangeIcon;
             
             SetContextMenu(isShutDownInProgress);
         }
@@ -114,11 +114,11 @@ namespace ShutDown
 
         private void OnTimerTick()
         {
-            if (_isShutDownInProgress && Settings.Instance.BlinkTrayIcon)
+            if (_isShutDownInProgress && SettingsData.Instance.BlinkTrayIcon)
             {
                 if (IsCurrentIconRed)
                 {
-                    if (PreventShutDownHelper.PreventShutDown) SetGreenIcon();
+                    if (SettingsData.Instance.PreventShutDown) SetGreenIcon();
                     else SetOrangeIcon();
                 }
                 else
@@ -128,7 +128,7 @@ namespace ShutDown
             }
             else
             {
-                if (PreventShutDownHelper.PreventShutDown)
+                if (SettingsData.Instance.PreventShutDown)
                 {
                     SetGreenIcon();
                 }

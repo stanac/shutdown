@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutDown"
+        xmlns:settingsView="clr-namespace:ShutDown.Views.Settings"
         mc:Ignorable="d"
         Title="{Binding Title}"
         Height="430"
@@ -296,7 +297,8 @@
 
             </Grid>
             
-            <Grid Grid.RowSpan="3"
+            <Grid Grid.Row="0"
+                  Grid.RowSpan="2"
                   Visibility="{Binding ShutDownInProgress, Converter={StaticResource BoolToVisibilityConverter}}"
                   Margin="4, 40, 4, 4">
                 <Grid.Background>
@@ -332,7 +334,8 @@
 
             </Grid>
 
-            <Grid Grid.RowSpan="3"
+            <Grid Grid.Row="0"
+                  Grid.RowSpan="2"
                   Visibility="{Binding NewPatternViewVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                   Margin="4, 40, 4, 4">
                 <Grid.Background>
@@ -383,60 +386,12 @@
 
             </Grid>
 
-            <Grid Grid.RowSpan="3"
-                  Visibility="{Binding SettingsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                  Margin="4, 40, 4, 4">
-                <Grid.Background>
-                    <SolidColorBrush Color="Silver"
-                                     Opacity="0.95" />
-                </Grid.Background>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <StackPanel Margin="10"
-                            VerticalAlignment="Top">
-                    <CheckBox Content="Start with windows"
-                              Margin="5"
-                              HorizontalAlignment="Left"
-                              IsChecked="{Binding DoesStartWithWindows}"/>
-                    <CheckBox Content="Close to tray"
-                              HorizontalAlignment="Left"
-                              Margin="5"
-                              IsChecked="{Binding CloseToTray}" />
-                    <TextBlock Text="When both checkboxes are checked app will start closed to tray when starting with windows."
-                               TextWrapping="Wrap"
-                               Margin="5" />
-                    <TextBlock Text=""
-                               Margin="5" />
-                    <CheckBox Content="Prevent ShutDown/Sleep/Hibernate due to inactivity while app is running" 
-                               Margin="5"
-                              IsChecked="{Binding PreventShutDown}"
-                              />
-                    <CheckBox Content="Prevent screen turning off and lock due to inactivity while app is running" 
-                               Margin="5"
-                              IsChecked="{Binding PreventLock}"
-                              />
-                    <CheckBox Content="Jiggle Mouse every 3 minutes (unnoticeable to user)"
-                              IsChecked="{Binding JiggleMouse}"
-                              Margin="5"/>
-                    <CheckBox Content="Blink tray icon when delayed operation is in progress"
-                              IsChecked="{Binding BlinkTrayIcon}" 
-                              Margin="5"/>
-                    <CheckBox Content="Check for new version weekly"
-                              IsChecked="{Binding CheckForNewVersionWeekly}" 
-                              Margin="5"/>
-                </StackPanel>
-
-                <Button Grid.Row="2"
-                        Content="Close"
-                        Margin="0, 20"
-                        Style="{StaticResource BtnSelect}"
-                        VerticalAlignment="Center"
-                        Command="{Binding HideSettingsCommand}" />
-
-            </Grid>
+            <!-- SETTINGS -->
+            <settingsView:SettingsControl Visibility="{Binding Path=DataContext.SettingsVisible.Value, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
+                                          Grid.Row="0"
+                                          Grid.RowSpan="2"
+                                          Margin="4, 34, 4, 4" 
+            />
 
         </Grid>
     </Border>

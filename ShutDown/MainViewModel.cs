@@ -7,6 +7,7 @@ using ShutDown.MachineState;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Linq;
+using ShutDown.Utils;
 
 namespace ShutDown
 {
@@ -23,7 +24,6 @@ namespace ShutDown
         private ICommand _startShutDownCommand;
         private ICommand _cancelShutDownCommand;
         private ICommand _showSettingsCommand;
-        private ICommand _hideSettingsCommand;
         private ICommand _showNewPatternViewCommand;
         private ICommand _saveNewPatternCommand;
         private ICommand _cancelNewPatternCommand;
@@ -34,18 +34,11 @@ namespace ShutDown
         private bool _shutDownInProgress;
         private string _shutDownRemainingTime;
         private string _operationName;
-        private bool _settingsVisible;
-        private bool _closeToTray;
         private DispatcherTimer _timer;
         private DateTime _startTime;
-        private bool _doesStartWithWindows;
-        private bool _blinkTrayIcon;
-        private bool _preventShutDown = PreventShutDownHelper.PreventShutDown;
-        private bool _preventLock = PreventShutDownHelper.PreventLock;
         private string _newPatternName;
         private bool _newPatternViewVisible;
         private string _newPatternDescription;
-        private bool _jiggleMouse;
         
         #endregion
 
@@ -56,23 +49,24 @@ namespace ShutDown
         {
             MouseJigglerHelper.Start();
 
+
             Title = WindowTitle;
-            var settings = Settings.Instance;
+
+            SettingsVisible = new ObservableProperty<bool>(nameof(SettingsVisible), this, false);
+            Mediator.Instance.HideSettingsView = () => SettingsVisible.Value = false;
+            Mediator.Instance.NewVersionCheckRequested = CheckForNewVersion;
+
+            var settings = SettingsData.Instance;
             Operation = settings.DefaultOperation;
             DelayMinutes = settings.DefaultDelay;
             MinMinutes = settings.MinMinutes;
             MaxMinutes = settings.MaxMinutes;
             Force = settings.DefaultForce;
-            JiggleMouse = settings.JiggleMouse;
-
-            _closeToTray = settings.CloseToTray;
-            _blinkTrayIcon = settings.BlinkTrayIcon;
 
             IExecutor shutdownExecutor = new ShutdownExecutor();
             IExecutor standbyExecutor = new StandbyExecutor();
             _modifyMachineStateService = new ModifyMachineStateService(shutdownExecutor, standbyExecutor);
 
-            DoesStartWithWindows = StartWithWindows.IsSet();
             foreach (var item in PatternStore.Instance.GetPatterns())
             {
                 Patterns.Add(item);
@@ -85,8 +79,8 @@ namespace ShutDown
 
         public string Title { get; }
 
-        public int MinMinutes { get; private set; }
-        public int MaxMinutes { get; private set; }
+        public int MinMinutes { get; }
+        public int MaxMinutes { get; }
         public bool Force { get; private set; }
         public bool ShutDownInProgress
         {
@@ -125,122 +119,12 @@ namespace ShutDown
                 }
             }
         }
-        public bool SettingsVisible
-        {
-            get => _settingsVisible;
-            set
-            {
-                if (_settingsVisible != value)
-                {
-                    _settingsVisible = value;
-                    RaisePropertyChanged(nameof(SettingsVisible));
-                }
-            }
-        }
-        public bool DoesStartWithWindows
-        {
-            get => _doesStartWithWindows;
-            set
-            {
-                if (value != _doesStartWithWindows)
-                {
-                    StartWithWindows.Set(value);
-                    _doesStartWithWindows = value;
-                    RaisePropertyChanged(nameof(DoesStartWithWindows));
-                }
-            }
-        }
-        public bool CloseToTray
-        {
-            get => _closeToTray;
-            set
-            {
-                if (_closeToTray != value)
-                {
-                    Settings.Instance.CloseToTray = value;
-                    Settings.Instance.Save();
-                    _closeToTray = value;
-                    RaisePropertyChanged(nameof(CloseToTray));
-                }
-            }
-        }
-        public bool BlinkTrayIcon
-        {
-            get => _blinkTrayIcon;
-            set
-            {
-                if (_blinkTrayIcon != value)
-                {
-                    Settings.Instance.BlinkTrayIcon = value;
-                    Settings.Instance.Save();
-                    _blinkTrayIcon = value;
-                    RaisePropertyChanged(nameof(BlinkTrayIcon));
-                }
-            }
-        }
-        public bool PreventShutDown
-        {
-            get => _preventShutDown;
-            set
-            {
-                if (value != _preventShutDown)
-                {
-                    _preventShutDown = value;
-                    PreventShutDownHelper.PreventShutDown = value;
-                    RaisePropertyChanged(nameof(PreventShutDown));
-                }
-            }
-        }
-        public bool JiggleMouse
-        {
-            get => _jiggleMouse;
-            set
-            {
-                if (value != _jiggleMouse)
-                {
-                    _jiggleMouse = value;
-                    RaisePropertyChanged(nameof(JiggleMouse));
-                    Settings.Instance.JiggleMouse = value;
-                    Settings.Instance.Save();
-                }
-            }
-        }
-
-        public bool CheckForNewVersionWeekly
-        {
-            get => VersionCheck.Instance.CheckForNewVersion;
-            set
-            {
-                if (value != VersionCheck.Instance.CheckForNewVersion)
-                {
-                    VersionCheck.Instance.CheckForNewVersion = value;
-                    VersionCheck.Instance.Save();
-
-                    if (value)
-                    {
-                        CheckForNewVersion();
-                    }
-                }
-            }
-        }
-
+        public ObservableProperty<bool> SettingsVisible { get; }
+      
         public string Version { get; } = AppVersion.CurrentVersion.Text;
 
         public bool IsNewVersionAvailable { get; set; }
 
-        public bool PreventLock
-        {
-            get => _preventLock;
-            set
-            {
-                if (value != _preventLock)
-                {
-                    _preventLock = value;
-                    PreventShutDownHelper.PreventLock = value;
-                    RaisePropertyChanged(nameof(PreventLock));
-                }
-            }
-        }
         public string NewPatternName
         {
             get => _newPatternName;
@@ -289,8 +173,8 @@ namespace ShutDown
                 if (value != _delayMinutes)
                 {
                     _delayMinutes = value;
-                    Settings.Instance.DefaultDelay = value;
-                    Settings.Instance.Save();
+                    SettingsData.Instance.DefaultDelay = value;
+                    SettingsData.Instance.Save();
                     RaisePropertyChanged(nameof(DelayMinutes));
                     RaisePropertyChanged(nameof(DelayText));
                 }
@@ -320,9 +204,7 @@ namespace ShutDown
 
         public ICommand CancelShutDownCommand => _cancelShutDownCommand ?? (_cancelShutDownCommand = new Command(CancelShutDown));
 
-        public ICommand ShowSettingsCommand => _showSettingsCommand ?? (_showSettingsCommand = new Command(ShowSettings));
-
-        public ICommand HideSettingsCommand => _hideSettingsCommand ?? (_hideSettingsCommand = new Command(HideSettings));
+        public ICommand ShowSettingsCommand => _showSettingsCommand ?? (_showSettingsCommand = new Command(() => SettingsVisible.Value = true));
 
         public ICommand ShowNewPatternViewCommand => _showNewPatternViewCommand ?? (_showNewPatternViewCommand = new Command(ShowNewPatternView));
 
@@ -337,8 +219,8 @@ namespace ShutDown
         private void SelectOperation(string operation)
         {
             Operation = (ShutDownOperation)Enum.Parse(typeof(ShutDownOperation), operation, true);
-            Settings.Instance.DefaultOperation = Operation;
-            Settings.Instance.Save();
+            SettingsData.Instance.DefaultOperation = Operation;
+            SettingsData.Instance.Save();
         }
 
         private void AddDelay(string value)
@@ -353,8 +235,8 @@ namespace ShutDown
         {
             Force = !Force;
             RaisePropertyChanged(nameof(Force));
-            Settings.Instance.DefaultForce = Force;
-            Settings.Instance.Save();
+            SettingsData.Instance.DefaultForce = Force;
+            SettingsData.Instance.Save();
         }
 
         private void StartShutDown()
@@ -401,16 +283,6 @@ namespace ShutDown
             {
                 //
             }
-        }
-
-        private void ShowSettings()
-        {
-            SettingsVisible = true;
-        }
-
-        private void HideSettings()
-        {
-            SettingsVisible = false;
         }
 
         private void RaiseCloseApp()

@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="ShutDown.Views.Settings.SettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShutDown.Views.Settings"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:SettingsViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="Silver"
+                         Opacity="0.95" />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="10"
+                VerticalAlignment="Top">
+            <CheckBox Content="Start with windows"
+                  Margin="5"
+                  HorizontalAlignment="Left"
+                  IsChecked="{Binding StartWithWindows.Value}"/>
+            <CheckBox Content="Close to tray"
+                  HorizontalAlignment="Left"
+                  Margin="5"
+                  IsChecked="{Binding CloseToTray.Value}" />
+            <TextBlock Text="When both checkboxes are checked app will start closed to tray when starting with windows."
+                   TextWrapping="Wrap"
+                   Margin="5" />
+            <TextBlock Text=""
+                   Margin="5" />
+            <CheckBox Content="Prevent ShutDown/Sleep/Hibernate due to inactivity while app is running" 
+                   Margin="5"
+                  IsChecked="{Binding PreventShutDown.Value}"
+                  />
+            <CheckBox Content="Prevent screen turning off and lock due to inactivity while app is running" 
+                   Margin="5"
+                  IsChecked="{Binding PreventLock.Value}"
+                  />
+            <CheckBox Content="Jiggle Mouse every 3 minutes (unnoticeable to user)"
+                  IsChecked="{Binding JiggleMouse.Value}"
+                  Margin="5"/>
+            <CheckBox Content="Blink tray icon when delayed operation is in progress"
+                  IsChecked="{Binding BlinkTrayIcon.Value}" 
+                  Margin="5"/>
+            <CheckBox Content="Check for new version weekly"
+                  IsChecked="{Binding CheckForNewVersion.Value}" 
+                  Margin="5"/>
+        </StackPanel>
+
+        <Button Grid.Row="1"
+            Content="Close"
+            Margin="0, 20"
+            Style="{StaticResource BtnSelect}"
+            VerticalAlignment="Center"
+            Command="{Binding HideSettingsCommend}" />
+
+    </Grid>
+</UserControl>

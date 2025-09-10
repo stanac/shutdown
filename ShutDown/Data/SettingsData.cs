@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace ShutDown.Data
 {
-    public class Settings : DataBase
+    public class SettingsData : DataBase
     {
-        public static Settings Instance { get; private set; }
+        public static SettingsData Instance { get; private set; }
         
         private static readonly string _filePath;
-
+        
         public int MinMinutes { get; set; }
         public int MaxMinutes { get; set; }
         public int DefaultDelay { get; set; }
@@ -24,27 +24,33 @@ namespace ShutDown.Data
         public bool PreventLock { get; set; }
         public bool JiggleMouse { get; set; }
 
-        private Settings()
+        private SettingsData()
         {
             Patterns = new List<PatternModel>();
         }
 
-        static Settings()
+        static SettingsData()
         {
-            
             _filePath = Path.Combine(FolderPath, "settings");
+            
             try
             {
                 if (!Directory.Exists(FolderPath))
                 {
                     Directory.CreateDirectory(FolderPath);
                 }
+
                 if (!File.Exists(_filePath))
                 {
                     var def = DefaultSettings();
                     def.Save();
                 }
-            } catch { }
+            }
+            catch (Exception ex)
+            {
+                Log.LogErrorAndDisplayMessageBox("Failed to create settings dir/file.", ex);
+            }
+
             LoadInstance();
         }
 
@@ -57,7 +63,7 @@ namespace ShutDown.Data
                     .Where(x => x.Length > 0)
                     .ToArray();
 
-                Instance = new Settings();
+                Instance = new SettingsData();
                 bool blinkIsSet = false;
 
                 foreach (var line in lines)
@@ -121,7 +127,7 @@ namespace ShutDown.Data
             }
         }
 
-        private static Settings DefaultSettings() => new Settings
+        private static SettingsData DefaultSettings() => new SettingsData
         {
             MinMinutes = 5,
             MaxMinutes = 1440,

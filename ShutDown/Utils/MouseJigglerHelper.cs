@@ -5,7 +5,7 @@ using System.Timers;
 using ShutDown.Data;
 using ShutDown.User32;
 
-namespace ShutDown
+namespace ShutDown.Utils
 {
     public static class MouseJigglerHelper
     {
@@ -32,7 +32,7 @@ namespace ShutDown
 
         private static void OnTick(object s, ElapsedEventArgs e)
         {
-            if (!Settings.Instance.JiggleMouse)
+            if (!SettingsData.Instance.JiggleMouse)
             {
                 return;
             }

@@ -1,15 +1,15 @@
-﻿using Microsoft.Win32;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.Win32;
 
-namespace ShutDown
+namespace ShutDown.Data
 {
-    public static class StartWithWindows
+    public static class StartWithWindowsAccessor
     {
-        public static readonly string _execPath;
+        private static readonly string _execPath;
         private static RegistryKey _regKeyDir = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private const string _regKey = "shutdown_stanac";
 
-        static StartWithWindows()
+        static StartWithWindowsAccessor()
         {
             _execPath = Assembly.GetExecutingAssembly().Location + " /winstart";
         }
