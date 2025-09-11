@@ -41,7 +41,7 @@ namespace ShutDown.Views.Operations
 
         private void OnTick()
         {
-            if (_operation == null)
+            if (_operation == null || IsCanceledDoToTimeGap.Value)
             {
                 return;
             }
@@ -54,6 +54,7 @@ namespace ShutDown.Views.Operations
                 if (Math.Abs((_nextTick - now).TotalSeconds) > 5.0)
                 {
                     IsCanceledDoToTimeGap.Value = true;
+                    RemainingTime.Value = "Cancelled do to time gap";
                     _timer.Stop();
                     return;
                 }
