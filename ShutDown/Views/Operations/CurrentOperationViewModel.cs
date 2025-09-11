@@ -34,6 +34,7 @@ namespace ShutDown.Views.Operations
 
             GlobalFunctions.Instance.StartOperation = Start;
             GlobalFunctions.Instance.CancelOperationRequested = Cancel;
+            GlobalFunctions.Instance.IsShutDownInProgress = () => _timer.IsEnabled;
 
             _timer.Interval = TimeSpan.FromMilliseconds(100);
             _timer.Tick += (s, _) => OnTick();
@@ -100,6 +101,8 @@ namespace ShutDown.Views.Operations
 
             opName += " in:";
             OperationName.Value = opName;
+
+            GlobalFunctions.Instance.ShowCurrentOperationView();
         }
 
         private void Cancel()

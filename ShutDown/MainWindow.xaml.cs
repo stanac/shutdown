@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using ShutDown.Models;
 using ShutDown.Utils;
 
 namespace ShutDown
@@ -14,7 +15,7 @@ namespace ShutDown
     public partial class MainWindow : Window
     {
         private bool _exiting;
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -91,9 +92,12 @@ namespace ShutDown
             if (SettingsData.Instance.CloseToTray && !_exiting)
             {
                 Hide();
+
                 if (GlobalFunctions.Instance.IsShutDownInProgress())
                 {
-                    var message = vm.OperationName.Replace("in:", "").Trim() + " is still in progress.";
+                    var currentOp = GlobalFunctions.Instance.GetCurrentOperation();
+                    string opName = currentOp.Operation.GetOperationName(currentOp.Force);
+                    var message = opName.Replace("in:", "").Trim() + " is still in progress.";
                     vm.TheTrayIcon.ShowNotification(message);
                 }
 

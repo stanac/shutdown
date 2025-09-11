@@ -62,174 +62,10 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Manual settings"
-                               Style="{StaticResource H1}" />
-
-                    <Grid Grid.Row="1"
-                          Margin="0, 20, 0, 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Select operation"
-                                   Style="{StaticResource H2}" />
-                        <StackPanel Grid.Column="1"
-                                    Orientation="Horizontal"
-                                    Margin="20, 0, 0, 0">
-                            <Button Style="{StaticResource BtnSelect}"
-                                    Content="Shut down"
-                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=ShutDown}"
-                                    Command="{Binding SelectOperationCommand}"
-                                    CommandParameter="ShutDown" />
-                            <Button Style="{StaticResource BtnSelect}"
-                                    Content="Restart"
-                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=Restart}"
-                                    Command="{Binding SelectOperationCommand}"
-                                    CommandParameter="Restart" />
-                            <Button Style="{StaticResource BtnSelect}"
-                                    Content="Hibernate"
-                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=Hibernate}"
-                                    Command="{Binding SelectOperationCommand}"
-                                    CommandParameter="Hibernate" />
-                            <Button Style="{StaticResource BtnSelect}"
-                                    Content="Log off"
-                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=SignOut}"
-                                    Command="{Binding SelectOperationCommand}"
-                                    CommandParameter="SignOut" />
-                            <Button Style="{StaticResource BtnSelect}" 
-                                    Content="Sleep" 
-                                    Background="{Binding Operation, Converter={StaticResource OperationToColorConverter}, ConverterParameter=Sleep}" 
-                                    Command="{Binding SelectOperationCommand}" 
-                                    CommandParameter="Sleep" /> 
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Grid.Row="2"
-                          Margin="0, 20, 0, 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Select delay"
-                                   Style="{StaticResource H2}" />
-
-                        <Slider Minimum="5"
-                                Maximum="1440"
-                                SmallChange="5"
-                                LargeChange="60"
-                                Grid.Column="1"
-                                Margin="20, 0"
-                                VerticalAlignment="Center"
-                                Value="{Binding DelayMinutes, Mode=TwoWay}">
-                        </Slider>
-
-                        <Grid Grid.Column="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.Resources>
-                                <Style TargetType="Button">
-                                    <Setter Property="BorderThickness"
-                                            Value="0" />
-                                    <Setter Property="Width"
-                                            Value="30" />
-                                    <Setter Property="Height"
-                                            Value="20" />
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <SolidColorBrush Color="DodgerBlue" />
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Grid.Resources>
-
-                            <Button Content="+5"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Command="{Binding AddDelayCommand}"
-                                    CommandParameter="5" />
-                            <Button Content="+15"
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Command="{Binding AddDelayCommand}"
-                                    CommandParameter="15" />
-                            <Button Content="-5"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Command="{Binding AddDelayCommand}"
-                                    CommandParameter="-5" />
-                            <Button Content="-15"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    Command="{Binding AddDelayCommand}"
-                                    CommandParameter="-15" />
-                        </Grid>
-                        
-                    </Grid>
-
-                    <Grid Grid.Row="3"
-                          Margin="0, 0, 0, 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="220" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Delay:"
-                                   Style="{StaticResource H2}" />
-                        <TextBlock Grid.Column="1"
-                                   Margin="10, 0, 0, 0"
-                                   Foreground="DodgerBlue"
-                                   FontWeight="Bold"
-                                   Style="{StaticResource H2}"
-                                   Text="{Binding DelayText}" />
-                        <Button Grid.Column="2"
-                                BorderThickness="2"
-                                BorderBrush="MidnightBlue"
-                                Margin="20, 0"
-                                Width="170"
-                                Background="DodgerBlue"
-                                Content="Start with manual setting"
-                                Command="{Binding StartShutDownCommand}"/>
-
-                        <Button Grid.Column="3"
-                                Margin="0, 0"
-                                Content="Force?"
-                                Width="70"
-                                Command="{Binding ToggleForceCommand}"
-                                Background="{Binding Force, Converter={StaticResource BoolToColorConverter}}" />
-
-                    </Grid>
-
-                    <TextBlock Grid.Row="4" HorizontalAlignment="Right"
-                               Margin="20, 0"
-                               Visibility="{Binding Force, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <Run>Use the</Run>
-                        <Run Foreground="DodgerBlue">Force</Run>
-                        <Run>at your own risk!</Run>
-                    </TextBlock>
-                </Grid>
+                <operationsView:OperationSelectorControl />
 
                 <patternsView:PatternListControl Grid.Row="1" />
                 
-
                 <StackPanel Grid.Row="2"
                             Orientation="Horizontal">
                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10">
@@ -246,24 +82,23 @@
 
             </Grid>
             
-            <operationsView:CurrentOperationControl Grid.Row="0"
-                                                    Grid.RowSpan="2"
-                                                    Visibility="{Binding Path=DataContext.ShutDownInProgress.Value, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                    Margin="4, 40, 4, 4"
-                                                    />
+            <operationsView:CurrentOperationControl
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Visibility="{Binding Path=DataContext.ShowCurrentOperation.Value, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
+                Margin="4, 40, 4, 4"
+                />
 
             <patternsView:NewPatternControl Grid.Row="0"
-                                            Grid.RowSpan="2"
-                                            Margin="4, 40, 4, 4"
-                                            Visibility="{Binding Path=DataContext.PatternVisible.Value, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
-                                            />
-            
+                Grid.RowSpan="2"
+                Margin="4, 40, 4, 4"
+                Visibility="{Binding Path=DataContext.NewPatternVisible.Value, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
+                />
 
-            <!-- SETTINGS -->
             <settingsView:SettingsControl Visibility="{Binding Path=DataContext.SettingsVisible.Value, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
-                                          Grid.Row="0"
-                                          Grid.RowSpan="2"
-                                          Margin="4, 34, 4, 4" 
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Margin="4, 34, 4, 4" 
             />
 
         </Grid>

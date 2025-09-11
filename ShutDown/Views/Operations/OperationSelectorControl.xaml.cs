@@ -3,11 +3,11 @@
 namespace ShutDown.Views.Operations
 {
     /// <summary>
-    /// Interaction logic for CurrentOperationControl.xaml
+    /// Interaction logic for OperationSelectorControl.xaml
     /// </summary>
-    public partial class CurrentOperationControl : UserControl
+    public partial class OperationSelectorControl : UserControl
     {
-        public CurrentOperationControl()
+        public OperationSelectorControl()
         {
             InitializeComponent();
         }

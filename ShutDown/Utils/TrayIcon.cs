@@ -36,7 +36,7 @@ namespace ShutDown.Utils
             _ni.Text = "Shut Down";
             SetContextMenu(false);
             _isShutDownInProgress = false;
-            _ni.DoubleClick += (s, e) =>
+            _ni.Click += (s, e) =>
             {
                 OnOpen?.Invoke();
             };

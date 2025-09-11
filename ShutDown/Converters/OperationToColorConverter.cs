@@ -13,6 +13,11 @@ namespace ShutDown.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is ObservableProperty<ShutDownOperation> opv)
+            {
+                value = opv.Value;
+            }
+
             var op = (ShutDownOperation)value;
             if (op.ToString().ToLower() == (parameter as string).ToLower())
             {

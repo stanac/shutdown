@@ -15,6 +15,7 @@ namespace ShutDown.Utils
         public Action HideNewPatternView { get; set; } = () => { };
         public Func<OperationModel> GetCurrentOperation { get; set; } = () => null;
         public Action HideCurrentOperationView { get; set; } = () => { };
+        public Action ShowCurrentOperationView { get; set; } = () => { };
         public Action StartOperation { get; set; } = () => { };
         public Action ExitApp { get; set; } = () => { };
         public Func<bool> IsShutDownInProgress { get; set; } = () => false;

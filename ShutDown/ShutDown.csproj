@@ -113,6 +113,10 @@
       <DependentUpon>CurrentOperationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Operations\CurrentOperationViewModel.cs" />
+    <Compile Include="Views\Operations\OperationSelectorControl.xaml.cs">
+      <DependentUpon>OperationSelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Operations\OperationSelectorViewModel.cs" />
     <Compile Include="Views\Settings\SettingsControl.xaml.cs">
       <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
@@ -138,6 +142,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Operations\CurrentOperationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Operations\OperationSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

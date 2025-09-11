@@ -66,6 +66,12 @@ namespace ShutDown.Views.Patterns
         internal void OnShown(bool isNowVisible)
         {
             var op = GlobalFunctions.Instance.GetCurrentOperation();
+
+            if (op == null)
+            {
+                return;
+            }
+
             NewPatternDescription.Value = op.Operation.GetOperationName(op.Force) + " " + TimeSpan.FromMinutes(op.DelayInMinutes).ToFormatedString();
             NewPatternName.Value = op.Operation.GetOperationName(op.Force, true) + " " + op.DelayInMinutes;
         }
