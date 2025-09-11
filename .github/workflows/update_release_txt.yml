@@ -1,8 +1,10 @@
-name: Update Release Names on GitHub Pages
+name: Update Releases File
 
 on:
   release:
     types: [published]
+
+  workflow_dispatch:
     
 jobs:
   update_release_info:
