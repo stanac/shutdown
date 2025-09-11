@@ -37,6 +37,7 @@
         <converters:OperationToColorConverter x:Key="OperationToColorConverter" />
         <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:TrueToCollapsedConverter x:Key="TrueToCollapsedConverter" />
 
     </Application.Resources>
 </Application>

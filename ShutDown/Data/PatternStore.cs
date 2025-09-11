@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ShutDown.Data
 {
-    class PatternStore : DataBase
+    public class PatternStore : DataBase
     {
         public static PatternStore Instance { get; }
         private static readonly string _filePath;
@@ -15,8 +15,7 @@ namespace ShutDown.Data
         {
             // save default setting on first run
             if (!File.Exists(_filePath))
-                File.WriteAllText(_filePath, @"
-p:U0QgNjBtaW4=;ShutDown;False;60;8e6cbfbc-75ad-463d-82b1-027b26d49168
+                File.WriteAllText(_filePath, @"p:U0QgNjBtaW4=;ShutDown;False;60;8e6cbfbc-75ad-463d-82b1-027b26d49168
 p:Ri1TRCA2MG1pbg==;ShutDown;True;60;aba47f32-71ae-409e-8335-c38936ef0d51
 p:U0QgMzBtaW4=;ShutDown;False;30;dc32f6f0-71ca-4536-ada4-0b57a3ff98f8
 p:Ri1TRCAzMG1pbg==;ShutDown;True;30;90761887-f577-45cc-a111-4e0e8418080b

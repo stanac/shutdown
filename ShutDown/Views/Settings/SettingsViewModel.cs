@@ -14,7 +14,7 @@ namespace ShutDown.Views.Settings
         public ObservableProperty<bool> BlinkTrayIcon { get; }
         public ObservableProperty<bool> CheckForNewVersion { get; }
 
-        public ICommand HideSettingsCommend { get; } = new Command(() => Mediator.Instance.HideSettingsView());
+        public ICommand HideSettingsCommend { get; } = new Command(() => GlobalFunctions.Instance.HideSettingsView());
 
         public SettingsViewModel()
         {
@@ -58,7 +58,7 @@ namespace ShutDown.Views.Settings
 
                     if (value)
                     {
-                        Mediator.Instance.NewVersionCheckRequested();
+                        GlobalFunctions.Instance.NewVersionCheckRequested();
                     }
                 });
         }

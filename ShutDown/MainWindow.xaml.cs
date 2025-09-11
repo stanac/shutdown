@@ -38,9 +38,14 @@ namespace ShutDown
                 }
             };
 
-            var vm = (DataContext as MainViewModel);
-            vm.CloseApp += (s, ec) => { Close(); };
+            GlobalFunctions.Instance.ExitApp = () =>
+            {
+                _exiting = true;
+                Close();
+            };
 
+            var vm = DataContext as MainViewModel;
+            
             var icon = vm.TheTrayIcon;
             icon.OnExit = () => 
             {
@@ -50,7 +55,7 @@ namespace ShutDown
                 
             };
             icon.OnOpen = () => { Show(); Application.Current.MainWindow.Activate(); };
-            icon.OnCancel = () => { vm.CancelShutDownCommand.Execute(null); };
+            icon.OnCancel = () => { GlobalFunctions.Instance.CancelOperationRequested(); };
 
             NewVersionLink.RequestNavigate += (sender, args) =>
             {
@@ -86,7 +91,7 @@ namespace ShutDown
             if (SettingsData.Instance.CloseToTray && !_exiting)
             {
                 Hide();
-                if (vm.ShutDownInProgress)
+                if (GlobalFunctions.Instance.IsShutDownInProgress())
                 {
                     var message = vm.OperationName.Replace("in:", "").Trim() + " is still in progress.";
                     vm.TheTrayIcon.ShowNotification(message);

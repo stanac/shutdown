@@ -2,7 +2,7 @@
 
 namespace ShutDown
 {
-    public class ObservableProperty<T> where T: IEquatable<T>
+    public class ObservableProperty<T>
     {
         private readonly string _propertyName;
         private readonly ObservableObject _parentObject;

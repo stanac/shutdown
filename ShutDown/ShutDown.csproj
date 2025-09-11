@@ -83,6 +83,7 @@
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\OperationToColorConverter.cs" />
+    <Compile Include="Converters\TrueToCollapsedConverter.cs" />
     <Compile Include="Data\DataBase.cs" />
     <Compile Include="Data\PatternStore.cs" />
     <Compile Include="Data\SettingsData.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Data\VersionCheck.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\AppVersion.cs" />
+    <Compile Include="Models\OperationModel.cs" />
     <Compile Include="ObservableProperty.cs" />
     <Compile Include="User32\InteropTypes.cs" />
     <Compile Include="MachineState\IExecutor.cs" />
@@ -97,7 +99,7 @@
     <Compile Include="MachineState\ModifyMachineStateService.cs" />
     <Compile Include="MachineState\ShutdownExecutor.cs" />
     <Compile Include="MachineState\StandbyExecutor.cs" />
-    <Compile Include="Utils\Mediator.cs" />
+    <Compile Include="Utils\GlobalFunctions.cs" />
     <Compile Include="Utils\MouseJigglerHelper.cs" />
     <Compile Include="Utils\PreventShutDownHelper.cs" />
     <Compile Include="Models\PatternModel.cs" />
@@ -107,10 +109,22 @@
     <Compile Include="Data\StartWithWindowsAccessor.cs" />
     <Compile Include="Utils\TrayIcon.cs" />
     <Compile Include="User32\User32.cs" />
+    <Compile Include="Views\Operations\CurrentOperationControl.xaml.cs">
+      <DependentUpon>CurrentOperationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Operations\CurrentOperationViewModel.cs" />
     <Compile Include="Views\Settings\SettingsControl.xaml.cs">
       <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsViewModel.cs" />
+    <Compile Include="Views\Patterns\NewPatternControl.xaml.cs">
+      <DependentUpon>NewPatternControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Patterns\NewPatternViewModel.cs" />
+    <Compile Include="Views\Patterns\PatternListControl.xaml.cs">
+      <DependentUpon>PatternListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Patterns\PatternListViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,7 +137,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Operations\CurrentOperationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings\SettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Patterns\NewPatternControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Patterns\PatternListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
