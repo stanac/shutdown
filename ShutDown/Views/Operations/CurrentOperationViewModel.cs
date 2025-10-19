@@ -55,7 +55,7 @@ namespace ShutDown.Views.Operations
                 if (Math.Abs((_nextTick - now).TotalSeconds) > 5.0)
                 {
                     IsCanceledDoToTimeGap.Value = true;
-                    RemainingTime.Value = "Cancelled do to time gap";
+                    RemainingTime.Value = "Cancelled due to time gap";
                     _timer.Stop();
                     return;
                 }

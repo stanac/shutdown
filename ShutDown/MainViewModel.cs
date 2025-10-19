@@ -10,7 +10,7 @@ namespace ShutDown
     {
         internal const string WindowTitle = "Shut Down";
         
-        public TrayIcon TheTrayIcon = new TrayIcon();
+        public TrayIcon TheTrayIcon { get; } = new TrayIcon();
 
         public ICommand ShowSettingsCommand { get; }
 

@@ -4,6 +4,11 @@ Timed shut down of your Windows PC
 
 ---
 
+### V 1.3.1 changes
+
+- Blinking tray icon fix
+- Spelling fix
+
 ### V 1.3 changes
 
 - If app is closed to tray, starting the app will bring existing instance of the app on top instead of starting a new one

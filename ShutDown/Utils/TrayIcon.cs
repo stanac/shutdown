@@ -10,7 +10,6 @@ namespace ShutDown.Utils
     {
         private NotifyIcon _ni;
         private Stream _iconStream;
-        private bool _isShutDownInProgress;
         private DispatcherTimer _timer;
         private string _currentIcon;
 
@@ -35,7 +34,7 @@ namespace ShutDown.Utils
             _ni.BalloonTipText = "Shut down is in progress";
             _ni.Text = "Shut Down";
             SetContextMenu(false);
-            _isShutDownInProgress = false;
+            
             _ni.Click += (s, e) =>
             {
                 OnOpen?.Invoke();
@@ -50,8 +49,6 @@ namespace ShutDown.Utils
                 OnTimerTick();
             };
             _timer.Start();
-
-            SetShutDownInProgress(false);
         }
 
         public Action OnExit { get; set; }
@@ -63,15 +60,7 @@ namespace ShutDown.Utils
             _ni.BalloonTipText = text;
             _ni.ShowBalloonTip(5 * 1000);
         }
-
-        public void SetShutDownInProgress(bool isShutDownInProgress)
-        {
-            _isShutDownInProgress = isShutDownInProgress;
-            _ni.Icon = SettingsData.Instance.PreventShutDown ? _greenIcon : _orangeIcon;
-            
-            SetContextMenu(isShutDownInProgress);
-        }
-
+        
         private System.Drawing.Icon GetIcon(string iconName)
         {
             if (_iconStream != null)
@@ -114,7 +103,7 @@ namespace ShutDown.Utils
 
         private void OnTimerTick()
         {
-            if (_isShutDownInProgress && SettingsData.Instance.BlinkTrayIcon)
+            if (GlobalFunctions.Instance.IsShutDownInProgress() && SettingsData.Instance.BlinkTrayIcon)
             {
                 if (IsCurrentIconRed)
                 {
