@@ -33,11 +33,7 @@ Timed shut down of your Windows PC
 
 ---
 
-![ShutDown](http://stanac.github.io/shutdown/images/ss-101-1.png)
-
-![ShutDown](http://stanac.github.io/shutdown/images/ss-101-2.png)
-
-![ShutDown](http://stanac.github.io/shutdown/images/ss-101-3.png)
+![ShutDown](http://stanac.github.io/shutdown/images/v131.png)
 
 
-For download visit [Releases](https://github.com/stanac/shutdown/releases).
+For downloads visit [Releases](https://github.com/stanac/shutdown/releases).
