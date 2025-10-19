@@ -1,11 +1,10 @@
-name: Update Releases File
+name: Update Release Names on GitHub Pages
 
 on:
   release:
     types: [published]
-
   workflow_dispatch:
-    
+
 jobs:
   update_release_info:
     runs-on: ubuntu-latest
@@ -16,21 +15,16 @@ jobs:
           ref: gh-pages
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get All Release Names
-        id: get_release_names
+      # COMBINED and CORRECTED step
+      - name: Fetch release names and write to file
         run: |
-          ALL_RELEASES=$(curl -s -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases")
-
-          RELEASE_NAMES=$(echo "$ALL_RELEASES" | jq -r '.[].name | select(.)')
-          echo "release_names=$RELEASE_NAMES" >> $GITHUB_OUTPUT
-
-      - name: Create or Update release_names.txt
-        run: |
-          echo "${{ steps.get_release_names.outputs.release_names }}" > release_names.txt
+          curl -s -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/releases" | \
+            jq -r '.[].name | select(.)' > release_names.txt
 
       - name: Commit and Push to gh-pages
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: gh-pages
-          commit_message: "Update release_names.txt for new release"
+          commit_message: "Update release_names.txt"
           file_pattern: "release_names.txt"
